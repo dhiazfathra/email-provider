@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { AUTH_PROVIDERS } from "@/lib/mock/marketing";
-import { useViewport } from "@/lib/useViewport";
 import { PRIMARY } from "./ui";
 
 type Field = { label: string; type: string; placeholder: string };
@@ -29,23 +28,21 @@ export function AuthPage({
   switchLabel: string;
   switchHref: string;
 }) {
-  const { narrow, mob } = useViewport();
-
   return (
     <section
       style={{
         display: "grid",
-        gridTemplateColumns: narrow ? "1fr" : "minmax(0,1fr) minmax(0,440px)",
+        gridTemplateColumns: "var(--auth-cols)",
         gap: 44,
         alignItems: "center",
-        padding: mob ? "48px 0 56px" : "76px 0 84px",
+        padding: "var(--hero-pad)",
       }}
     >
       <div style={{ minWidth: 0 }}>
         <h1
           style={{
             margin: 0,
-            fontSize: mob ? 38 : narrow ? 46 : 54,
+            fontSize: "var(--h1)",
             lineHeight: 1.06,
             fontWeight: 600,
             letterSpacing: "-.035em",

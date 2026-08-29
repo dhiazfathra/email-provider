@@ -12,7 +12,9 @@ import {
 import { Card } from "./ui";
 
 export default function ConsoleOverview() {
-  const { narrow, mob } = useViewport();
+  const { mob } = useViewport();
+  // Bar counts change the number of DOM nodes, not the box they sit in, so
+  // this one stays in JS — it cannot shift the layout.
   const chart = deliverySeries(mob ? 7 : 14);
 
   return (
@@ -20,11 +22,7 @@ export default function ConsoleOverview() {
       <section
         style={{
           display: "grid",
-          gridTemplateColumns: mob
-            ? "1fr"
-            : narrow
-              ? "repeat(2,minmax(0,1fr))"
-              : "repeat(4,minmax(0,1fr))",
+          gridTemplateColumns: "var(--kpi-cols)",
           gap: 14,
           marginTop: 26,
         }}
@@ -99,7 +97,7 @@ export default function ConsoleOverview() {
       <section
         style={{
           display: "grid",
-          gridTemplateColumns: narrow ? "1fr" : "minmax(0,1.7fr) minmax(0,1fr)",
+          gridTemplateColumns: "var(--console-split-cols)",
           gap: 14,
           marginTop: 14,
           alignItems: "start",
@@ -155,7 +153,7 @@ export default function ConsoleOverview() {
             style={{
               marginTop: 22,
               display: "flex",
-              gap: mob ? 4 : 8,
+              gap: "var(--chart-gap)",
               alignItems: "flex-end",
               height: 210,
             }}

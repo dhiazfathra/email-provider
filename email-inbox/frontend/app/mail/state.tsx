@@ -103,9 +103,7 @@ export function MailProvider({ children }: { children: ReactNode }) {
     [toggles, category, selectedId, railCollapsed, isMobile, isTablet],
   );
 
-  return (
-    <MailContext.Provider value={value}>{children}</MailContext.Provider>
-  );
+  return <MailContext.Provider value={value}>{children}</MailContext.Provider>;
 }
 
 export function useMail() {

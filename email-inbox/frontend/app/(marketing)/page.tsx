@@ -9,11 +9,9 @@ import {
   initialsOf,
   AV,
 } from "@/lib/mock/marketing";
-import { useViewport } from "@/lib/useViewport";
 import { FeatureCard, PRIMARY, SectionHeading, useGridCols } from "./ui";
 
 export default function PaneHome() {
-  const { narrow, mob } = useViewport();
   const cols = useGridCols();
 
   return (
@@ -21,12 +19,10 @@ export default function PaneHome() {
       <section
         style={{
           display: "grid",
-          gridTemplateColumns: narrow
-            ? "1fr"
-            : "minmax(0,1fr) minmax(0,1.02fr)",
+          gridTemplateColumns: "var(--hero-cols)",
           gap: 48,
           alignItems: "center",
-          padding: mob ? "48px 0 56px" : "76px 0 84px",
+          padding: "var(--hero-pad)",
         }}
       >
         <div style={{ minWidth: 0 }}>
@@ -61,7 +57,7 @@ export default function PaneHome() {
           <h1
             style={{
               margin: "20px 0 0",
-              fontSize: mob ? 38 : narrow ? 46 : 54,
+              fontSize: "var(--h1)",
               lineHeight: 1.04,
               fontWeight: 600,
               letterSpacing: "-.035em",
@@ -321,7 +317,7 @@ export default function PaneHome() {
       <section
         style={{
           marginTop: 56,
-          padding: mob ? 26 : "38px 40px",
+          padding: "var(--cta-pad)",
           borderRadius: 30,
           background: "rgba(255,255,255,.5)",
           backdropFilter: "blur(26px)",

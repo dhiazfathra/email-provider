@@ -239,7 +239,7 @@ The secret is never returned here. `POST /v2/projects/{projectId}/keys` returns
 the full token exactly once in its `201` response:
 
 ```jsonc
-{ "id": "key_...", "token": "plume_live_sk_9f2b...4c71", "shownOnce": true }
+{ "id": "key_...", "token": "<the full key, shown once>", "shownOnce": true }
 ```
 
 `DELETE /v2/projects/{projectId}/keys/{id}` revokes immediately; in-flight

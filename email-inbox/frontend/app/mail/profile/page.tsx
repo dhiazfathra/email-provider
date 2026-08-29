@@ -5,7 +5,7 @@ import { PROFILE } from "@/lib/mock/mail";
 import { useMail } from "../state";
 
 export default function MailProfileScreen() {
-  const { theme, isMobile, isDesktop } = useMail();
+  const { theme } = useMail();
 
   return (
     <section
@@ -19,7 +19,7 @@ export default function MailProfileScreen() {
         WebkitBackdropFilter: "blur(30px)",
         border: `1px solid ${theme.edge}`,
         boxShadow: "0 30px 70px -40px rgba(76,66,160,.55)",
-        padding: isMobile ? 20 : "30px 34px",
+        padding: "var(--mail-page-pad)",
       }}
     >
       <div
@@ -101,9 +101,7 @@ export default function MailProfileScreen() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: isMobile
-            ? "repeat(2,minmax(0,1fr))"
-            : "repeat(4,minmax(0,1fr))",
+          gridTemplateColumns: "var(--mail-stat-cols)",
           gap: 12,
           marginTop: 28,
         }}
@@ -137,7 +135,7 @@ export default function MailProfileScreen() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: isDesktop ? "repeat(2,minmax(0,1fr))" : "1fr",
+          gridTemplateColumns: "var(--mail-settings-cols)",
           gap: 16,
           marginTop: 16,
         }}
@@ -162,9 +160,7 @@ export default function MailProfileScreen() {
           >
             Details
           </div>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: 13 }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
             {PROFILE.details.map((d) => (
               <div key={d.k} style={{ display: "flex", gap: 14, fontSize: 14 }}>
                 <span style={{ flex: "0 0 108px", opacity: 0.5 }}>{d.k}</span>

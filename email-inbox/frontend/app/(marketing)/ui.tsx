@@ -1,7 +1,6 @@
 "use client";
 
 import type { CSSProperties, ReactNode } from "react";
-import { useViewport } from "@/lib/useViewport";
 
 export const PRIMARY = "linear-gradient(135deg,#7c7ef2,#a78bfa)";
 
@@ -71,9 +70,8 @@ export function PageHead({
   updated?: string;
   maxWidth?: number;
 }) {
-  const { narrow, mob } = useViewport();
   return (
-    <section style={{ padding: mob ? "44px 0 34px" : "68px 0 40px" }}>
+    <section style={{ padding: "var(--page-pad)" }}>
       <div
         style={{
           fontSize: 12.5,
@@ -88,7 +86,7 @@ export function PageHead({
       <h1
         style={{
           margin: "14px 0 0",
-          fontSize: mob ? 38 : narrow ? 46 : 54,
+          fontSize: "var(--h1)",
           lineHeight: 1.06,
           fontWeight: 600,
           letterSpacing: "-.035em",
@@ -120,12 +118,11 @@ export function PageHead({
 }
 
 export function SectionHeading({ children }: { children: ReactNode }) {
-  const { mob } = useViewport();
   return (
     <h2
       style={{
         margin: 0,
-        fontSize: mob ? 26 : 32,
+        fontSize: "var(--h2)",
         fontWeight: 600,
         letterSpacing: "-.03em",
       }}
@@ -137,16 +134,11 @@ export function SectionHeading({ children }: { children: ReactNode }) {
 
 /** Three-up card grid, collapsing at the design's breakpoints. */
 export function useGridCols() {
-  const { narrow, mob } = useViewport();
   return {
-    feat: mob
-      ? "1fr"
-      : narrow
-        ? "repeat(2,minmax(0,1fr))"
-        : "repeat(3,minmax(0,1fr))",
-    pair: mob ? "1fr" : "repeat(2,minmax(0,1fr))",
-    plans: narrow ? "1fr" : "repeat(3,minmax(0,1fr))",
-    log: mob ? "1fr" : "180px minmax(0,1fr)",
+    feat: "var(--feat-cols)",
+    pair: "var(--pair-cols)",
+    plans: "var(--plan-cols)",
+    log: "var(--log-cols)",
   };
 }
 

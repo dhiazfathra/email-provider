@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useViewport } from "@/lib/useViewport";
 import {
   EVENTS,
   EVENT_FILTERS,
@@ -19,13 +18,10 @@ import {
 } from "../ui";
 
 export default function ConsoleActivity() {
-  const { narrow, mob } = useViewport();
   const [filter, setFilter] = useState("All");
   const [selected, setSelected] = useState(2);
 
-  const cols = mob
-    ? "minmax(0,1fr) auto"
-    : "minmax(0,1.3fr) minmax(0,1.5fr) 120px 110px 74px";
+  const cols = "var(--log-cols)";
 
   const rows = EVENTS.map((e, i) => ({ ...e, index: i })).filter(
     (e) => filter === "All" || e.status === filter,
@@ -72,9 +68,9 @@ export default function ConsoleActivity() {
           }}
         >
           <span>Recipient</span>
-          {!mob && <span>Subject</span>}
-          {!mob && <span>Stream</span>}
-          {!mob && <span>Status</span>}
+          <span className="wide-only">Subject</span>
+          <span className="wide-only">Stream</span>
+          <span className="wide-only">Status</span>
           <span style={{ textAlign: "right" }}>Time</span>
         </div>
         {rows.map((e) => {
@@ -108,25 +104,25 @@ export default function ConsoleActivity() {
               <span style={{ fontFamily: MONO, fontSize: 12.5, ...ELLIPSIS }}>
                 {e.to}
               </span>
-              {!mob && (
-                <span style={{ fontSize: 13.5, opacity: 0.75, ...ELLIPSIS }}>
-                  {e.subject}
-                </span>
-              )}
-              {!mob && (
-                <span style={{ fontSize: 12.5, opacity: 0.5, ...ELLIPSIS }}>
-                  {e.stream}
-                </span>
-              )}
-              {!mob && (
-                <Tag
-                  bg={tagBg}
-                  color={tagColor}
-                  style={{ justifySelf: "start" }}
-                >
-                  {e.status}
-                </Tag>
-              )}
+              <span
+                className="wide-only"
+                style={{ fontSize: 13.5, opacity: 0.75, ...ELLIPSIS }}
+              >
+                {e.subject}
+              </span>
+              <span
+                className="wide-only"
+                style={{ fontSize: 12.5, opacity: 0.5, ...ELLIPSIS }}
+              >
+                {e.stream}
+              </span>
+              <Tag
+                bg={tagBg}
+                color={tagColor}
+                style={{ justifySelf: "start", display: "var(--wide-only)" }}
+              >
+                {e.status}
+              </Tag>
               <span
                 style={{
                   fontSize: 12.5,
@@ -184,9 +180,7 @@ export default function ConsoleActivity() {
             style={{
               marginTop: 18,
               display: "grid",
-              gridTemplateColumns: narrow
-                ? "1fr"
-                : "minmax(0,1fr) minmax(0,1.1fr)",
+              gridTemplateColumns: "var(--trace-cols)",
               gap: 18,
             }}
           >

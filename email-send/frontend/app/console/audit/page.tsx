@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useViewport } from "@/lib/useViewport";
 import {
   AUDIT,
   AUDIT_CATEGORIES,
@@ -17,12 +16,9 @@ function categoryTint(category: string): [string, string] {
 }
 
 export default function ConsoleAudit() {
-  const { mob } = useViewport();
   const [category, setCategory] = useState<string>("All");
 
-  const cols = mob
-    ? "minmax(0,1fr) auto"
-    : "minmax(0,1.2fr) 170px minmax(0,1.2fr) minmax(0,1.1fr) 110px";
+  const cols = "var(--audit-cols)";
 
   const rows = AUDIT.filter(
     (a) => category === "All" || a.category === category,
@@ -67,9 +63,9 @@ export default function ConsoleAudit() {
           }}
         >
           <span>Actor</span>
-          {!mob && <span>Action</span>}
-          {!mob && <span>Target</span>}
-          {!mob && <span>Source</span>}
+          <span className="wide-only">Action</span>
+          <span className="wide-only">Target</span>
+          <span className="wide-only">Source</span>
           <span style={{ textAlign: "right" }}>When</span>
         </div>
         {rows.map((a, i) => {
@@ -114,35 +110,35 @@ export default function ConsoleAudit() {
                 </span>
                 <span style={{ fontSize: 13.5, ...ELLIPSIS }}>{a.actor}</span>
               </div>
-              {!mob && (
-                <Tag bg={bg} color={color} style={{ justifySelf: "start" }}>
-                  {a.action}
-                </Tag>
-              )}
-              {!mob && (
-                <span
-                  style={{
-                    fontFamily: MONO,
-                    fontSize: 12.5,
-                    opacity: 0.7,
-                    ...ELLIPSIS,
-                  }}
-                >
-                  {a.target}
-                </span>
-              )}
-              {!mob && (
-                <span
-                  style={{
-                    fontFamily: MONO,
-                    fontSize: 12,
-                    opacity: 0.45,
-                    ...ELLIPSIS,
-                  }}
-                >
-                  {a.source}
-                </span>
-              )}
+              <Tag
+                bg={bg}
+                color={color}
+                style={{ justifySelf: "start", display: "var(--wide-only)" }}
+              >
+                {a.action}
+              </Tag>
+              <span
+                className="wide-only"
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 12.5,
+                  opacity: 0.7,
+                  ...ELLIPSIS,
+                }}
+              >
+                {a.target}
+              </span>
+              <span
+                className="wide-only"
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 12,
+                  opacity: 0.45,
+                  ...ELLIPSIS,
+                }}
+              >
+                {a.source}
+              </span>
               <span
                 style={{
                   fontSize: 12.5,

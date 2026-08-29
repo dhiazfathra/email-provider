@@ -1,22 +1,15 @@
 "use client";
 
-import { useViewport } from "@/lib/useViewport";
 import { TEMPLATES } from "@/lib/mock/console";
 import { Card, ELLIPSIS, MONO } from "../ui";
 
 export default function ConsoleTemplates() {
-  const { narrow, mob } = useViewport();
-
   return (
     <section
       style={{
         marginTop: 24,
         display: "grid",
-        gridTemplateColumns: mob
-          ? "1fr"
-          : narrow
-            ? "repeat(2,minmax(0,1fr))"
-            : "repeat(3,minmax(0,1fr))",
+        gridTemplateColumns: "var(--tpl-cols)",
         gap: 14,
       }}
     >

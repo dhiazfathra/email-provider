@@ -4,7 +4,7 @@ import { SETTING_GROUPS } from "@/lib/mock/mail";
 import { useMail } from "../state";
 
 export default function MailSettingsScreen() {
-  const { theme, toggles, flip, isMobile, isDesktop } = useMail();
+  const { theme, toggles, flip } = useMail();
 
   return (
     <section
@@ -18,7 +18,7 @@ export default function MailSettingsScreen() {
         WebkitBackdropFilter: "blur(30px)",
         border: `1px solid ${theme.edge}`,
         boxShadow: "0 30px 70px -40px rgba(76,66,160,.55)",
-        padding: isMobile ? 20 : "30px 34px",
+        padding: "var(--mail-page-pad)",
       }}
     >
       <h1
@@ -37,7 +37,7 @@ export default function MailSettingsScreen() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: isDesktop ? "repeat(2,minmax(0,1fr))" : "1fr",
+          gridTemplateColumns: "var(--mail-settings-cols)",
           gap: 16,
         }}
       >
@@ -63,9 +63,7 @@ export default function MailSettingsScreen() {
             >
               {g.title}
             </div>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: 14 }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {g.rows.map((r) => {
                 const on = r.kind === "switch" ? toggles[r.key] : false;
                 const body = (

@@ -1,12 +1,10 @@
 "use client";
 
 import { COMPLIANCE, SECURITY } from "@/lib/mock/marketing";
-import { useViewport } from "@/lib/useViewport";
 import { FeatureCard, PageHead, SectionHeading, useGridCols } from "../ui";
 
 export default function PaneSecurity() {
   const cols = useGridCols();
-  const { mob } = useViewport();
 
   return (
     <>
@@ -25,7 +23,7 @@ export default function PaneSecurity() {
       <section
         style={{
           marginTop: 34,
-          padding: mob ? 26 : "38px 40px",
+          padding: "var(--cta-pad)",
           borderRadius: 30,
           background: "rgba(255,255,255,.5)",
           backdropFilter: "blur(26px)",

@@ -46,3 +46,133 @@ a:hover {
     animation: none;
   }
 }
+
+/*
+ * Responsive layout values.
+ *
+ * These were originally JS branches on window.innerWidth, copied from the
+ * mockups. Reading the width only after mount meant the first paint always used
+ * the 1280px desktop layout and then jumped — worth ~0.9 CLS on a phone. The
+ * layout-affecting values now come from media queries so the first paint is
+ * already correct; JS keeps only the branches that change *structure*.
+ *
+ * Breakpoints match the mockups: landing narrow < 960 / mobile < 640,
+ * console narrow < 1080 / mobile < 720, docs narrow < 1180 / mobile < 720.
+ */
+:root {
+  /* landing */
+  --hero-cols: minmax(0, 1fr) minmax(0, 1.02fr);
+  --hero-pad: 74px 0 80px;
+  --feat-cols: repeat(3, minmax(0, 1fr));
+  --split-cols: minmax(0, 1.15fr) minmax(0, 1fr);
+  --plan-cols: repeat(3, minmax(0, 1fr));
+  --cta-pad: 38px 40px;
+  --nav-display: flex;
+  --bar-w: 160px;
+  --h1: 53px;
+  --h2: 32px;
+
+  /* console */
+  --console-shell-cols: 250px minmax(0, 1fr);
+  --console-rail-display: flex;
+  --console-tabs-display: none;
+  --console-main-pad: 30px 34px 56px;
+  --console-h1: 31px;
+  --kpi-cols: repeat(4, minmax(0, 1fr));
+  --console-split-cols: minmax(0, 1.7fr) minmax(0, 1fr);
+  --tpl-cols: repeat(3, minmax(0, 1fr));
+  --dns-cols: repeat(2, minmax(0, 1fr));
+  --log-cols: minmax(0, 1.3fr) minmax(0, 1.5fr) 120px 110px 74px;
+  --audit-cols: minmax(0, 1.2fr) 170px minmax(0, 1.2fr) minmax(0, 1.1fr) 110px;
+  --sup-cols: minmax(0, 1.4fr) 140px minmax(0, 1fr) 80px;
+  --key-cols: minmax(0, 1fr) 130px 90px;
+  --trace-cols: minmax(0, 1fr) minmax(0, 1.1fr);
+  --chart-gap: 8px;
+  --wide-only: initial;
+
+  /* docs */
+  --docs-shell-cols: 236px minmax(0, 1fr) 200px;
+  --docs-side-display: flex;
+  --docs-toc-display: flex;
+  --docs-search-display: flex;
+  --docs-pad: 34px 36px;
+  --docs-h1: 42px;
+  --docs-h2: 29px;
+  --step-cols: repeat(4, minmax(0, 1fr));
+  --pair-cols: repeat(2, minmax(0, 1fr));
+  --param-cols: 190px 130px minmax(0, 1fr);
+  --err-cols: 56px 190px minmax(0, 1fr);
+}
+
+/* Cells that only exist in the wide table layouts. */
+.wide-only {
+  display: var(--wide-only, initial);
+}
+
+@media (max-width: 1179px) {
+  :root {
+    --docs-shell-cols: 232px minmax(0, 1fr);
+    --docs-toc-display: none;
+    --pair-cols: 1fr;
+  }
+}
+
+@media (max-width: 1079px) {
+  :root {
+    --kpi-cols: repeat(2, minmax(0, 1fr));
+    --console-split-cols: 1fr;
+    --tpl-cols: repeat(2, minmax(0, 1fr));
+    --trace-cols: 1fr;
+  }
+}
+
+@media (max-width: 959px) {
+  :root {
+    --hero-cols: 1fr;
+    --feat-cols: repeat(2, minmax(0, 1fr));
+    --split-cols: 1fr;
+    --plan-cols: 1fr;
+    --h1: 44px;
+  }
+}
+
+@media (max-width: 719px) {
+  :root {
+    --console-shell-cols: 1fr;
+    --console-rail-display: none;
+    --console-tabs-display: flex;
+    --console-main-pad: 26px 20px 44px;
+    --console-h1: 26px;
+    --kpi-cols: 1fr;
+    --tpl-cols: 1fr;
+    --dns-cols: 1fr;
+    --log-cols: minmax(0, 1fr) auto;
+    --audit-cols: minmax(0, 1fr) auto;
+    --sup-cols: minmax(0, 1fr) auto;
+    --key-cols: minmax(0, 1fr) auto;
+    --chart-gap: 4px;
+    --wide-only: none;
+
+    --docs-shell-cols: 1fr;
+    --docs-side-display: none;
+    --docs-search-display: none;
+    --docs-pad: 24px;
+    --docs-h1: 32px;
+    --docs-h2: 24px;
+    --step-cols: 1fr;
+    --param-cols: 1fr;
+    --err-cols: 1fr;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --hero-pad: 46px 0 54px;
+    --feat-cols: 1fr;
+    --cta-pad: 26px;
+    --nav-display: none;
+    --bar-w: 80px;
+    --h1: 36px;
+    --h2: 26px;
+  }
+}

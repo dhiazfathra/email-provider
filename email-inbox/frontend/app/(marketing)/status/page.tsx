@@ -1,11 +1,9 @@
 "use client";
 
 import { INCIDENTS, SERVICES, uptimeBars } from "@/lib/mock/marketing";
-import { useViewport } from "@/lib/useViewport";
 import { PageHead, SectionHeading, useGridCols } from "../ui";
 
 export default function PaneStatus() {
-  const { mob } = useViewport();
   const cols = useGridCols();
 
   return (
@@ -32,9 +30,7 @@ export default function PaneStatus() {
             key={s.name}
             style={{
               display: "grid",
-              gridTemplateColumns: mob
-                ? "1fr auto"
-                : "minmax(0,1fr) auto 120px",
+              gridTemplateColumns: "var(--status-cols)",
               gap: 18,
               alignItems: "center",
               padding: "16px 18px",
@@ -66,29 +62,27 @@ export default function PaneStatus() {
                 {s.note}
               </div>
             </div>
-            {!mob && (
-              <div
-                aria-hidden
-                style={{
-                  display: "flex",
-                  gap: 3,
-                  alignItems: "flex-end",
-                  height: 26,
-                }}
-              >
-                {uptimeBars(34, si, s.degraded).map((b, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      width: 5,
-                      borderRadius: 3,
-                      height: b.h,
-                      background: b.color,
-                    }}
-                  />
-                ))}
-              </div>
-            )}
+            <div
+              aria-hidden
+              style={{
+                display: "var(--status-bars-display)",
+                gap: 3,
+                alignItems: "flex-end",
+                height: 26,
+              }}
+            >
+              {uptimeBars(34, si, s.degraded).map((b, i) => (
+                <span
+                  key={i}
+                  style={{
+                    width: 5,
+                    borderRadius: 3,
+                    height: b.h,
+                    background: b.color,
+                  }}
+                />
+              ))}
+            </div>
             <div style={{ textAlign: "right" }}>
               <div
                 style={{

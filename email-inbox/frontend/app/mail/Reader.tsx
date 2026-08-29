@@ -89,9 +89,7 @@ export function Reader({ compact }: { compact: boolean }) {
             gap: 22,
           }}
         >
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: 14 }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <h1
               style={{
                 margin: 0,
@@ -104,9 +102,7 @@ export function Reader({ compact }: { compact: boolean }) {
             >
               {thread.subject}
             </h1>
-            <div
-              style={{ display: "flex", alignItems: "center", gap: 12 }}
-            >
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <span
                 aria-hidden
                 style={{
@@ -172,9 +168,7 @@ export function Reader({ compact }: { compact: boolean }) {
                 paddingTop: 4,
               }}
             >
-              <span
-                style={{ fontSize: 14, fontWeight: 500, color: theme.fg }}
-              >
+              <span style={{ fontSize: 14, fontWeight: 500, color: theme.fg }}>
                 {thread.sender}
               </span>
               <span style={{ fontSize: 12.5, opacity: 0.55 }}>

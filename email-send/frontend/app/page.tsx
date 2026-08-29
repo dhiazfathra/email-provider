@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useViewport } from "@/lib/useViewport";
 import {
   CODE,
   FEATURES,
@@ -27,11 +26,12 @@ const GLASS: React.CSSProperties = {
 const PRIMARY = "linear-gradient(135deg,#7c7ef2,#a78bfa)";
 
 export default function PlumeLanding() {
-  const { narrow, mob } = useViewport();
   const [lang, setLang] = useState<CodeLang>("curl");
 
-  const h1 = mob ? "36px" : narrow ? "44px" : "53px";
-  const h2 = mob ? "26px" : "32px";
+  // Responsive values come from CSS variables in globals.css so the first
+  // paint is already correct — see the note there.
+  const h1 = "var(--h1)";
+  const h2 = "var(--h2)";
 
   return (
     <div
@@ -133,7 +133,7 @@ export default function PlumeLanding() {
           </div>
           <nav
             style={{
-              display: mob ? "none" : "flex",
+              display: "var(--nav-display)",
               gap: 4,
               marginLeft: 14,
             }}
@@ -185,12 +185,10 @@ export default function PlumeLanding() {
         <section
           style={{
             display: "grid",
-            gridTemplateColumns: narrow
-              ? "1fr"
-              : "minmax(0,1fr) minmax(0,1.02fr)",
+            gridTemplateColumns: "var(--hero-cols)",
             gap: 44,
             alignItems: "center",
-            padding: mob ? "46px 0 54px" : "74px 0 80px",
+            padding: "var(--hero-pad)",
           }}
         >
           <div style={{ minWidth: 0 }}>
@@ -430,11 +428,7 @@ export default function PlumeLanding() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: mob
-                ? "1fr"
-                : narrow
-                  ? "repeat(2,minmax(0,1fr))"
-                  : "repeat(3,minmax(0,1fr))",
+              gridTemplateColumns: "var(--feat-cols)",
               gap: 16,
             }}
           >
@@ -497,9 +491,7 @@ export default function PlumeLanding() {
           style={{
             marginTop: 56,
             display: "grid",
-            gridTemplateColumns: narrow
-              ? "1fr"
-              : "minmax(0,1.15fr) minmax(0,1fr)",
+            gridTemplateColumns: "var(--split-cols)",
             gap: 16,
             alignItems: "start",
           }}
@@ -563,7 +555,7 @@ export default function PlumeLanding() {
                   <span style={{ fontSize: 14 }}>{p.name}</span>
                   <div
                     style={{
-                      width: mob ? 80 : 160,
+                      width: "var(--bar-w)",
                       height: 7,
                       borderRadius: 5,
                       background: "rgba(124,126,242,.14)",
@@ -682,7 +674,7 @@ export default function PlumeLanding() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: narrow ? "1fr" : "repeat(3,minmax(0,1fr))",
+              gridTemplateColumns: "var(--plan-cols)",
               gap: 16,
               alignItems: "start",
             }}
@@ -807,7 +799,7 @@ export default function PlumeLanding() {
           style={{
             ...GLASS,
             marginTop: 56,
-            padding: mob ? 26 : "38px 40px",
+            padding: "var(--cta-pad)",
             borderRadius: 30,
             border: "1px solid rgba(255,255,255,.78)",
             boxShadow: "0 40px 80px -46px rgba(76,66,160,.6)",

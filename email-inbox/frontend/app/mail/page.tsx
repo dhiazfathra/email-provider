@@ -1,14 +1,12 @@
 "use client";
 
 import { EmailList } from "./EmailList";
-import { useMail } from "./state";
 
 export default function MailListScreen() {
-  const { isMobile } = useMail();
-
+  // Row density is decided by CSS at the mobile breakpoint, not here.
   return (
     <div style={{ flex: 1, minHeight: 0, display: "grid" }}>
-      <EmailList compact={isMobile} />
+      <EmailList compact={false} />
     </div>
   );
 }

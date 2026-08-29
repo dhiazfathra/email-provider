@@ -46,3 +46,160 @@ a:hover {
     animation: none;
   }
 }
+
+/*
+ * Responsive layout values.
+ *
+ * These were JS branches on window.innerWidth copied from the mockups. Reading
+ * the width only after mount meant the first paint used the 1280px desktop
+ * layout and then jumped, which measured as 0.35 CLS on the mail app and 0.6+
+ * on the marketing pages. Layout-affecting values now come from media queries;
+ * JS keeps only the branches that change structure or respond to a click.
+ *
+ * Breakpoints match the mockups: marketing narrow < 900 / mobile < 640,
+ * mail app tablet < 1120 / mobile < 720.
+ */
+:root {
+  /* marketing */
+  --hero-cols: minmax(0, 1fr) minmax(0, 1.02fr);
+  --auth-cols: minmax(0, 1fr) minmax(0, 440px);
+  --hero-pad: 76px 0 84px;
+  --page-pad: 68px 0 40px;
+  --feat-cols: repeat(3, minmax(0, 1fr));
+  --pair-cols: repeat(2, minmax(0, 1fr));
+  --plan-cols: repeat(3, minmax(0, 1fr));
+  --log-cols: 180px minmax(0, 1fr);
+  --role-cols: minmax(0, 1fr) 140px 80px;
+  --status-cols: minmax(0, 1fr) auto 120px;
+  --status-bars-display: flex;
+  --cta-pad: 38px 40px;
+  --nav-display: flex;
+  --h1: 54px;
+  --h2: 32px;
+
+  /* mail app */
+  --mail-shell-cols: 248px 1fr;
+  --mail-rail-display: flex;
+  --mail-chips-display: none;
+  --mail-bottom-display: none;
+  --mail-logo-display: none;
+  --mail-gear-display: grid;
+  --mail-shell-pad: 26px;
+  --mail-shell-gap: 22px;
+  --mail-main-gap: 16px;
+  --mail-main-pb: 0px;
+  --mail-head-gap: 16px;
+  --mail-head-pad: 14px 20px;
+  --mail-page-pad: 30px 34px;
+  --mail-settings-cols: repeat(2, minmax(0, 1fr));
+  --mail-stat-cols: repeat(4, minmax(0, 1fr));
+  --list-head-pad: 20px 24px 14px;
+  --list-h1: 21px;
+  --cat-pad: 0 20px 12px;
+  --list-pad: 0 12px 12px;
+  --row-pad: 13px 16px;
+  --row-gap: 14px;
+  --filters-display: flex;
+
+  /* email row: wide layout by default */
+  --row-cols: 38px minmax(0, 1fr) auto;
+  --row-dir: row;
+  --row-align: center;
+  --row-mid-gap: 14px;
+  --sub-indent: 0px;
+  --sub-size: 14px;
+  --sender-flex: 0 0 176px;
+  --row-meta-display: flex;
+  --row-time-display: none;
+  --row-extra-display: inline;
+}
+
+@media (max-width: 1119px) {
+  :root {
+    --mail-shell-pad: 18px;
+    --mail-shell-gap: 14px;
+    /* tablet drops the preview line and tag pill from each row */
+    --row-extra-display: none;
+  }
+}
+
+@media (max-width: 899px) {
+  :root {
+    --hero-cols: 1fr;
+    --auth-cols: 1fr;
+    --feat-cols: repeat(2, minmax(0, 1fr));
+    --plan-cols: 1fr;
+    --h1: 46px;
+  }
+}
+
+@media (max-width: 719px) {
+  :root {
+    --mail-shell-cols: 1fr;
+    --mail-rail-display: none;
+    --mail-chips-display: flex;
+    --mail-bottom-display: flex;
+    --mail-logo-display: block;
+    --mail-gear-display: none;
+    --mail-shell-pad: 12px;
+    --mail-shell-gap: 0px;
+    --mail-main-gap: 10px;
+    --mail-main-pb: 78px;
+    --mail-head-gap: 10px;
+    --mail-head-pad: 10px 12px;
+    --mail-page-pad: 20px;
+    --mail-settings-cols: 1fr;
+    --mail-stat-cols: repeat(2, minmax(0, 1fr));
+    --list-head-pad: 16px 16px 10px;
+    --list-h1: 19px;
+    --cat-pad: 0 12px 10px;
+    --list-pad: 0 8px 8px;
+    --row-pad: 11px 12px;
+    --row-gap: 11px;
+    --filters-display: none;
+
+    --row-cols: 38px minmax(0, 1fr);
+    --row-dir: column;
+    --row-align: stretch;
+    --row-mid-gap: 3px;
+    --sub-indent: 13px;
+    --sub-size: 13.5px;
+    --sender-flex: 0 0 auto;
+    --row-meta-display: none;
+    --row-time-display: block;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --hero-pad: 48px 0 56px;
+    --page-pad: 44px 0 34px;
+    --feat-cols: 1fr;
+    --pair-cols: 1fr;
+    --log-cols: 1fr;
+    --role-cols: 1fr;
+    --status-cols: 1fr auto;
+    --status-bars-display: none;
+    --cta-pad: 26px;
+    --nav-display: none;
+    --h1: 38px;
+    --h2: 26px;
+  }
+}
+
+/*
+ * The split screen shows the compact row layout at every width, because the
+ * list shares the viewport with the reader.
+ */
+.email-list--compact {
+  --row-cols: 38px minmax(0, 1fr);
+  --row-dir: column;
+  --row-align: stretch;
+  --row-mid-gap: 3px;
+  --sub-indent: 13px;
+  --sub-size: 13.5px;
+  --sender-flex: 0 0 auto;
+  --row-meta-display: none;
+  --row-time-display: block;
+  --row-extra-display: none;
+}

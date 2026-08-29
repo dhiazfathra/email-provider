@@ -2,12 +2,10 @@
 
 import Link from "next/link";
 import { PERKS, ROLES } from "@/lib/mock/marketing";
-import { useViewport } from "@/lib/useViewport";
 import { Card, PageHead, SectionHeading, useGridCols } from "../ui";
 
 export default function PaneCareers() {
   const cols = useGridCols();
-  const { mob } = useViewport();
 
   return (
     <>
@@ -60,7 +58,7 @@ export default function PaneCareers() {
               href="/support"
               style={{
                 display: "grid",
-                gridTemplateColumns: mob ? "1fr" : "minmax(0,1fr) 140px 80px",
+                gridTemplateColumns: "var(--role-cols)",
                 gap: 18,
                 alignItems: "center",
                 padding: "22px 24px",

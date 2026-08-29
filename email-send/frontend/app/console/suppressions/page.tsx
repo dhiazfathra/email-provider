@@ -1,6 +1,5 @@
 "use client";
 
-import { useViewport } from "@/lib/useViewport";
 import { SUPPRESS_STATS, SUPPRESSIONS } from "@/lib/mock/console";
 import { Card, COLUMN_HEADER, ELLIPSIS, MONO, Tag } from "../ui";
 
@@ -11,10 +10,7 @@ function reasonTint(reason: string): [string, string] {
 }
 
 export default function ConsoleSuppressions() {
-  const { narrow, mob } = useViewport();
-  const cols = mob
-    ? "minmax(0,1fr) auto"
-    : "minmax(0,1.4fr) 140px minmax(0,1fr) 80px";
+  const cols = "var(--sup-cols)";
 
   return (
     <>
@@ -22,11 +18,7 @@ export default function ConsoleSuppressions() {
         style={{
           marginTop: 24,
           display: "grid",
-          gridTemplateColumns: mob
-            ? "1fr"
-            : narrow
-              ? "repeat(2,minmax(0,1fr))"
-              : "repeat(4,minmax(0,1fr))",
+          gridTemplateColumns: "var(--kpi-cols)",
           gap: 14,
         }}
       >
@@ -67,8 +59,8 @@ export default function ConsoleSuppressions() {
           }}
         >
           <span>Address</span>
-          {!mob && <span>Reason</span>}
-          {!mob && <span>Source</span>}
+          <span className="wide-only">Reason</span>
+          <span className="wide-only">Source</span>
           <span style={{ textAlign: "right" }}>Added</span>
         </div>
         {SUPPRESSIONS.map((s, i) => {
@@ -89,16 +81,19 @@ export default function ConsoleSuppressions() {
               <span style={{ fontFamily: MONO, fontSize: 12.5, ...ELLIPSIS }}>
                 {s.address}
               </span>
-              {!mob && (
-                <Tag bg={bg} color={color} style={{ justifySelf: "start" }}>
-                  {s.reason}
-                </Tag>
-              )}
-              {!mob && (
-                <span style={{ fontSize: 13, opacity: 0.5, ...ELLIPSIS }}>
-                  {s.source}
-                </span>
-              )}
+              <Tag
+                bg={bg}
+                color={color}
+                style={{ justifySelf: "start", display: "var(--wide-only)" }}
+              >
+                {s.reason}
+              </Tag>
+              <span
+                className="wide-only"
+                style={{ fontSize: 13, opacity: 0.5, ...ELLIPSIS }}
+              >
+                {s.source}
+              </span>
               <span
                 style={{ fontSize: 12.5, opacity: 0.45, textAlign: "right" }}
               >

@@ -1,12 +1,9 @@
 "use client";
 
-import { useViewport } from "@/lib/useViewport";
 import { DOMAINS } from "@/lib/mock/console";
 import { Card, ELLIPSIS, MONO, Tag } from "../ui";
 
 export default function ConsoleDomains() {
-  const { mob } = useViewport();
-
   return (
     <section
       style={{
@@ -57,7 +54,7 @@ export default function ConsoleDomains() {
               style={{
                 marginTop: 16,
                 display: "grid",
-                gridTemplateColumns: mob ? "1fr" : "repeat(2,minmax(0,1fr))",
+                gridTemplateColumns: "var(--dns-cols)",
                 gap: 10,
               }}
             >

@@ -1,13 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import {
-  AV,
-  CATEGORIES,
-  EMAILS,
-  TAG_TINT,
-  initialsOf,
-} from "@/lib/mock/mail";
+import { AV, CATEGORIES, EMAILS, TAG_TINT, initialsOf } from "@/lib/mock/mail";
 import { useMail } from "./state";
 
 const ELLIPSIS = {
@@ -21,24 +15,14 @@ const ELLIPSIS = {
  * sender and subject stack instead of sitting side by side.
  */
 export function EmailList({ compact }: { compact: boolean }) {
-  const {
-    theme,
-    category,
-    setCategory,
-    selectedId,
-    setSelectedId,
-    isMobile,
-    isTablet,
-    isDesktop,
-  } = useMail();
+  const { theme, category, setCategory, selectedId, setSelectedId } = useMail();
   const router = useRouter();
 
   const rows = EMAILS.filter((e) => e.category === category);
-  const showPreview = !compact && !isTablet;
-  const showTags = !compact && !isTablet;
 
   return (
     <section
+      className={compact ? "email-list email-list--compact" : "email-list"}
       style={{
         minWidth: 0,
         display: "flex",
@@ -57,13 +41,13 @@ export function EmailList({ compact }: { compact: boolean }) {
           display: "flex",
           alignItems: "center",
           gap: 8,
-          padding: isMobile ? "16px 16px 10px" : "20px 24px 14px",
+          padding: "var(--list-head-pad)",
         }}
       >
         <h1
           style={{
             margin: 0,
-            fontSize: isMobile ? 19 : 21,
+            fontSize: "var(--list-h1)",
             fontWeight: 600,
             letterSpacing: "-.02em",
           }}
@@ -83,25 +67,23 @@ export function EmailList({ compact }: { compact: boolean }) {
           12 new
         </span>
         <div style={{ flex: 1 }} />
-        {isDesktop && (
-          <div style={{ display: "flex", gap: 6 }}>
-            {["All", "Unread", "Attachments"].map((f, i) => (
-              <span
-                key={f}
-                style={{
-                  fontSize: 13,
-                  fontWeight: i === 0 ? 600 : 400,
-                  padding: "6px 13px",
-                  borderRadius: 10,
-                  color: i === 0 ? theme.accent : theme.soft(0.6),
-                  background: i === 0 ? theme.selected : "transparent",
-                }}
-              >
-                {f}
-              </span>
-            ))}
-          </div>
-        )}
+        <div style={{ display: "var(--filters-display)", gap: 6 }}>
+          {["All", "Unread", "Attachments"].map((f, i) => (
+            <span
+              key={f}
+              style={{
+                fontSize: 13,
+                fontWeight: i === 0 ? 600 : 400,
+                padding: "6px 13px",
+                borderRadius: 10,
+                color: i === 0 ? theme.accent : theme.soft(0.6),
+                background: i === 0 ? theme.selected : "transparent",
+              }}
+            >
+              {f}
+            </span>
+          ))}
+        </div>
       </div>
 
       <div
@@ -109,7 +91,7 @@ export function EmailList({ compact }: { compact: boolean }) {
           display: "flex",
           gap: 6,
           overflowX: "auto",
-          padding: isMobile ? "0 12px 10px" : "0 20px 12px",
+          padding: "var(--cat-pad)",
           flex: "none",
         }}
       >
@@ -198,7 +180,7 @@ export function EmailList({ compact }: { compact: boolean }) {
           flex: 1,
           overflowY: "auto",
           WebkitOverflowScrolling: "touch",
-          padding: isMobile ? "0 8px 8px" : "0 12px 12px",
+          padding: "var(--list-pad)",
           display: "flex",
           flexDirection: "column",
           gap: 4,
@@ -217,12 +199,10 @@ export function EmailList({ compact }: { compact: boolean }) {
               }}
               style={{
                 display: "grid",
-                gridTemplateColumns: compact
-                  ? "38px minmax(0,1fr)"
-                  : "38px minmax(0,1fr) auto",
+                gridTemplateColumns: "var(--row-cols)",
                 alignItems: "center",
-                gap: isMobile ? 11 : 14,
-                padding: isMobile ? "11px 12px" : "13px 16px",
+                gap: "var(--row-gap)",
+                padding: "var(--row-pad)",
                 borderRadius: 16,
                 textAlign: "left",
                 fontFamily: "inherit",
@@ -273,9 +253,9 @@ export function EmailList({ compact }: { compact: boolean }) {
               <span
                 style={{
                   display: "flex",
-                  flexDirection: compact ? "column" : "row",
-                  alignItems: compact ? "stretch" : "center",
-                  gap: compact ? 3 : 14,
+                  flexDirection: "var(--row-dir)" as "row",
+                  alignItems: "var(--row-align)",
+                  gap: "var(--row-mid-gap)",
                   minWidth: 0,
                 }}
               >
@@ -285,7 +265,7 @@ export function EmailList({ compact }: { compact: boolean }) {
                     alignItems: "center",
                     gap: 7,
                     minWidth: 0,
-                    flex: compact ? "0 0 auto" : "0 0 176px",
+                    flex: "var(--sender-flex)",
                   }}
                 >
                   <span
@@ -307,18 +287,17 @@ export function EmailList({ compact }: { compact: boolean }) {
                   >
                     {e.sender}
                   </span>
-                  {compact && (
-                    <span
-                      style={{
-                        marginLeft: "auto",
-                        flex: "none",
-                        fontSize: 12,
-                        opacity: 0.45,
-                      }}
-                    >
-                      {e.time}
-                    </span>
-                  )}
+                  <span
+                    style={{
+                      display: "var(--row-time-display)",
+                      marginLeft: "auto",
+                      flex: "none",
+                      fontSize: 12,
+                      opacity: 0.45,
+                    }}
+                  >
+                    {e.time}
+                  </span>
                 </span>
                 <span
                   style={{
@@ -326,57 +305,63 @@ export function EmailList({ compact }: { compact: boolean }) {
                     display: "flex",
                     alignItems: "baseline",
                     gap: 9,
-                    paddingLeft: compact ? 13 : 0,
+                    paddingLeft: "var(--sub-indent)",
                   }}
                 >
                   <span
                     style={{
-                      fontSize: compact ? 13.5 : 14,
-                      fontWeight: compact ? 400 : e.unread ? 600 : 400,
-                      color: compact ? theme.soft(0.6) : theme.fg,
+                      fontSize: "var(--sub-size)",
+                      fontWeight: e.unread ? 600 : 400,
+                      color: theme.fg,
                       ...ELLIPSIS,
                     }}
                   >
                     {e.subject}
                   </span>
-                  {showPreview && (
-                    <span
-                      style={{ fontSize: 13.5, opacity: 0.45, ...ELLIPSIS }}
-                    >
-                      {e.preview}
-                    </span>
-                  )}
-                </span>
-              </span>
-              {!compact && (
-                <span
-                  style={{ display: "flex", alignItems: "center", gap: 10 }}
-                >
-                  {showTags && e.tag && (
-                    <span
-                      style={{
-                        fontSize: 11.5,
-                        fontWeight: 500,
-                        padding: "3px 9px",
-                        borderRadius: 8,
-                        color: tagColor,
-                        background: tagBg,
-                      }}
-                    >
-                      {e.tag}
-                    </span>
-                  )}
                   <span
                     style={{
-                      fontSize: 12.5,
+                      display: "var(--row-extra-display)",
+                      fontSize: 13.5,
                       opacity: 0.45,
-                      textAlign: "right",
+                      ...ELLIPSIS,
                     }}
                   >
-                    {e.time}
+                    {e.preview}
                   </span>
                 </span>
-              )}
+              </span>
+              <span
+                style={{
+                  display: "var(--row-meta-display)",
+                  alignItems: "center",
+                  gap: 10,
+                }}
+              >
+                {e.tag && (
+                  <span
+                    style={{
+                      display: "var(--row-extra-display)",
+                      fontSize: 11.5,
+                      fontWeight: 500,
+                      padding: "3px 9px",
+                      borderRadius: 8,
+                      color: tagColor,
+                      background: tagBg,
+                    }}
+                  >
+                    {e.tag}
+                  </span>
+                )}
+                <span
+                  style={{
+                    fontSize: 12.5,
+                    opacity: 0.45,
+                    textAlign: "right",
+                  }}
+                >
+                  {e.time}
+                </span>
+              </span>
             </button>
           );
         })}

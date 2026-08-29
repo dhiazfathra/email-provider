@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { useViewport } from "@/lib/useViewport";
 import {
   NAV,
   PAGE_META,
@@ -17,7 +16,6 @@ export default function ConsoleLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { mob } = useViewport();
   const pathname = usePathname();
   const [range, setRange] = useState<Range>("7d");
 
@@ -73,13 +71,13 @@ export default function ConsoleLayout({
         style={{
           position: "relative",
           display: "grid",
-          gridTemplateColumns: mob ? "1fr" : "250px minmax(0,1fr)",
+          gridTemplateColumns: "var(--console-shell-cols)",
           minHeight: "100vh",
         }}
       >
         <aside
           style={{
-            display: mob ? "none" : "flex",
+            display: "var(--console-rail-display)",
             flexDirection: "column",
             gap: 22,
             padding: "22px 18px",
@@ -259,7 +257,7 @@ export default function ConsoleLayout({
         <main
           style={{
             minWidth: 0,
-            padding: mob ? "26px 20px 44px" : "30px 34px 56px",
+            padding: "var(--console-main-pad)",
           }}
         >
           <header
@@ -274,7 +272,7 @@ export default function ConsoleLayout({
               <h1
                 style={{
                   margin: 0,
-                  fontSize: mob ? 26 : 31,
+                  fontSize: "var(--console-h1)",
                   fontWeight: 600,
                   letterSpacing: "-.03em",
                 }}
@@ -325,42 +323,40 @@ export default function ConsoleLayout({
 
           {/* Mobile navigation: the sidebar is hidden below 720px in the design,
               so the section links move inline. */}
-          {mob && (
-            <nav
-              style={{
-                display: "flex",
-                gap: 8,
-                marginTop: 18,
-                overflowX: "auto",
-                paddingBottom: 4,
-              }}
-            >
-              {NAV.map((n) => {
-                const on = pathname === n.href;
-                return (
-                  <Link
-                    key={n.href}
-                    href={n.href}
-                    aria-current={on ? "page" : undefined}
-                    style={{
-                      whiteSpace: "nowrap",
-                      padding: "8px 13px",
-                      borderRadius: 12,
-                      fontSize: 13.5,
-                      fontWeight: on ? 600 : 400,
-                      color: on ? "#4c46b8" : "rgba(38,35,74,.62)",
-                      background: on
-                        ? "rgba(255,255,255,.88)"
-                        : "rgba(255,255,255,.45)",
-                      border: `1px solid ${on ? "rgba(124,126,242,.4)" : "rgba(255,255,255,.85)"}`,
-                    }}
-                  >
-                    {n.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          )}
+          <nav
+            style={{
+              display: "var(--console-tabs-display)",
+              gap: 8,
+              marginTop: 18,
+              overflowX: "auto",
+              paddingBottom: 4,
+            }}
+          >
+            {NAV.map((n) => {
+              const on = pathname === n.href;
+              return (
+                <Link
+                  key={n.href}
+                  href={n.href}
+                  aria-current={on ? "page" : undefined}
+                  style={{
+                    whiteSpace: "nowrap",
+                    padding: "8px 13px",
+                    borderRadius: 12,
+                    fontSize: 13.5,
+                    fontWeight: on ? 600 : 400,
+                    color: on ? "#4c46b8" : "rgba(38,35,74,.62)",
+                    background: on
+                      ? "rgba(255,255,255,.88)"
+                      : "rgba(255,255,255,.45)",
+                    border: `1px solid ${on ? "rgba(124,126,242,.4)" : "rgba(255,255,255,.85)"}`,
+                  }}
+                >
+                  {n.label}
+                </Link>
+              );
+            })}
+          </nav>
 
           {children}
         </main>

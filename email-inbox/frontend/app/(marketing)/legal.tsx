@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useViewport } from "@/lib/useViewport";
 import { Card, PageHead, useGridCols } from "./ui";
 
 /** Shared body for /privacy and /terms — same layout, different sections. */
@@ -19,7 +18,6 @@ export function LegalPage({
   sections: { title: string; body: string }[];
 }) {
   const cols = useGridCols();
-  const { mob } = useViewport();
 
   return (
     <>
@@ -67,7 +65,7 @@ export function LegalPage({
       <section
         style={{
           marginTop: 34,
-          padding: mob ? 26 : "38px 40px",
+          padding: "var(--cta-pad)",
           borderRadius: 30,
           background: "rgba(255,255,255,.5)",
           backdropFilter: "blur(26px)",

@@ -136,9 +136,7 @@ export function Compose({
                 borderBottom: "1px solid rgba(124,126,242,.13)",
               }}
             >
-              <span style={{ fontSize: 13, width: 38, opacity: 0.45 }}>
-                To
-              </span>
+              <span style={{ fontSize: 13, width: 38, opacity: 0.45 }}>To</span>
               {DRAFT.to.map((r) => (
                 <span
                   key={r.name}

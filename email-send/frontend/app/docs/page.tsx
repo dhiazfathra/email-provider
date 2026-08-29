@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useViewport } from "@/lib/useViewport";
 import {
   API_ERRORS,
   DOCS_LANGS,
@@ -55,16 +54,15 @@ function useActiveSection() {
 }
 
 export default function PlumeDocs() {
-  const { width } = useViewport();
-  const narrow = width < 1180;
-  const mob = width < 720;
   const [lang, setLang] = useState<DocsLang>("curl");
   const active = useActiveSection();
 
-  const pad = mob ? 24 : "34px 36px";
-  const h2 = mob ? 24 : 29;
-  const pairCols = narrow ? "1fr" : "repeat(2,minmax(0,1fr))";
-  const stepCols = mob ? "1fr" : "repeat(4,minmax(0,1fr))";
+  // Responsive values come from CSS variables in globals.css, so the first
+  // paint is already correct — see the note there.
+  const pad = "var(--docs-pad)";
+  const h2 = "var(--docs-h2)";
+  const pairCols = "var(--pair-cols)";
+  const stepCols = "var(--step-cols)";
   const labelOf = (id: string) =>
     DOCS_SECTIONS.find((s) => s.id === id)?.label ?? id;
 
@@ -193,42 +191,40 @@ export default function PlumeDocs() {
             Docs
           </span>
           <div style={{ flex: 1 }} />
-          {!mob && (
-            <div
+          <div
+            style={{
+              display: "var(--docs-search-display)",
+              alignItems: "center",
+              gap: 9,
+              padding: "9px 14px",
+              borderRadius: 13,
+              background: "rgba(255,255,255,.62)",
+              border: "1px solid rgba(255,255,255,.9)",
+              minWidth: 230,
+            }}
+          >
+            <span aria-hidden style={{ opacity: 0.35, fontSize: 14 }}>
+              ⌕
+            </span>
+            <input
+              type="search"
+              placeholder="Search the docs"
+              aria-label="Search the docs"
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 9,
-                padding: "9px 14px",
-                borderRadius: 13,
-                background: "rgba(255,255,255,.62)",
-                border: "1px solid rgba(255,255,255,.9)",
-                minWidth: 230,
+                flex: 1,
+                minWidth: 0,
+                border: "none",
+                background: "transparent",
+                outline: "none",
+                fontFamily: "inherit",
+                fontSize: 14,
+                color: "#26234a",
               }}
-            >
-              <span aria-hidden style={{ opacity: 0.35, fontSize: 14 }}>
-                ⌕
-              </span>
-              <input
-                type="search"
-                placeholder="Search the docs"
-                aria-label="Search the docs"
-                style={{
-                  flex: 1,
-                  minWidth: 0,
-                  border: "none",
-                  background: "transparent",
-                  outline: "none",
-                  fontFamily: "inherit",
-                  fontSize: 14,
-                  color: "#26234a",
-                }}
-              />
-              <span style={{ fontFamily: MONO, fontSize: 11, opacity: 0.35 }}>
-                ⌘K
-              </span>
-            </div>
-          )}
+            />
+            <span style={{ fontFamily: MONO, fontSize: 11, opacity: 0.35 }}>
+              ⌘K
+            </span>
+          </div>
           <Link
             href="/console"
             style={{
@@ -248,78 +244,72 @@ export default function PlumeDocs() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: mob
-              ? "1fr"
-              : narrow
-                ? "232px minmax(0,1fr)"
-                : "236px minmax(0,1fr) 200px",
+            gridTemplateColumns: "var(--docs-shell-cols)",
             gap: 26,
             alignItems: "start",
             marginTop: 26,
           }}
         >
-          {!mob && (
-            <aside
-              style={{
-                display: "flex",
-                position: "sticky",
-                top: 24,
-                flexDirection: "column",
-                gap: 22,
-                padding: "22px 18px",
-                borderRadius: 24,
-                background: "rgba(255,255,255,.5)",
-                backdropFilter: "blur(22px)",
-                WebkitBackdropFilter: "blur(22px)",
-                border: "1px solid rgba(255,255,255,.8)",
-                boxShadow: "0 24px 60px -46px rgba(76,66,160,.7)",
-                maxHeight: "calc(100vh - 48px)",
-                overflow: "auto",
-              }}
-            >
-              {DOCS_NAV.map((g) => (
+          <aside
+            style={{
+              display: "var(--docs-side-display)",
+              position: "sticky",
+              top: 24,
+              flexDirection: "column",
+              gap: 22,
+              padding: "22px 18px",
+              borderRadius: 24,
+              background: "rgba(255,255,255,.5)",
+              backdropFilter: "blur(22px)",
+              WebkitBackdropFilter: "blur(22px)",
+              border: "1px solid rgba(255,255,255,.8)",
+              boxShadow: "0 24px 60px -46px rgba(76,66,160,.7)",
+              maxHeight: "calc(100vh - 48px)",
+              overflow: "auto",
+            }}
+          >
+            {DOCS_NAV.map((g) => (
+              <div
+                key={g.group}
+                style={{ display: "flex", flexDirection: "column", gap: 2 }}
+              >
                 <div
-                  key={g.group}
-                  style={{ display: "flex", flexDirection: "column", gap: 2 }}
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                    letterSpacing: ".09em",
+                    textTransform: "uppercase",
+                    opacity: 0.4,
+                    padding: "0 12px 8px",
+                  }}
                 >
-                  <div
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 600,
-                      letterSpacing: ".09em",
-                      textTransform: "uppercase",
-                      opacity: 0.4,
-                      padding: "0 12px 8px",
-                    }}
-                  >
-                    {g.group}
-                  </div>
-                  {g.ids.map((id) => {
-                    const on = active === id;
-                    return (
-                      <a
-                        key={id}
-                        href={`#${id}`}
-                        aria-current={on ? "true" : undefined}
-                        style={{
-                          padding: "8px 12px",
-                          borderRadius: 11,
-                          fontSize: 14,
-                          fontWeight: on ? 600 : 400,
-                          color: on ? "#4c46b8" : "rgba(38,35,74,.66)",
-                          background: on
-                            ? "rgba(255,255,255,.85)"
-                            : "transparent",
-                        }}
-                      >
-                        {labelOf(id)}
-                      </a>
-                    );
-                  })}
+                  {g.group}
                 </div>
-              ))}
-            </aside>
-          )}
+                {g.ids.map((id) => {
+                  const on = active === id;
+                  return (
+                    <a
+                      key={id}
+                      href={`#${id}`}
+                      aria-current={on ? "true" : undefined}
+                      style={{
+                        padding: "8px 12px",
+                        borderRadius: 11,
+                        fontSize: 14,
+                        fontWeight: on ? 600 : 400,
+                        color: on ? "#4c46b8" : "rgba(38,35,74,.66)",
+                        background: on
+                          ? "rgba(255,255,255,.85)"
+                          : "transparent",
+                      }}
+                    >
+                      {labelOf(id)}
+                    </a>
+                  );
+                })}
+              </div>
+            ))}
+          </aside>
 
           <main
             style={{
@@ -345,7 +335,7 @@ export default function PlumeDocs() {
               <h1
                 style={{
                   margin: "10px 0 0",
-                  fontSize: mob ? 32 : 42,
+                  fontSize: "var(--docs-h1)",
                   lineHeight: 1.08,
                   fontWeight: 600,
                   letterSpacing: "-.035em",
@@ -654,9 +644,7 @@ export default function PlumeDocs() {
                     key={p.name}
                     style={{
                       display: "grid",
-                      gridTemplateColumns: mob
-                        ? "1fr"
-                        : "190px 130px minmax(0,1fr)",
+                      gridTemplateColumns: "var(--param-cols)",
                       gap: 14,
                       padding: "13px 14px",
                       borderRadius: 14,
@@ -972,9 +960,7 @@ export default function PlumeDocs() {
                     key={e.code}
                     style={{
                       display: "grid",
-                      gridTemplateColumns: mob
-                        ? "1fr"
-                        : "56px 190px minmax(0,1fr)",
+                      gridTemplateColumns: "var(--err-cols)",
                       gap: 14,
                       padding: "13px 14px",
                       borderRadius: 14,
@@ -1154,50 +1140,48 @@ export default function PlumeDocs() {
             </section>
           </main>
 
-          {!narrow && (
-            <aside
+          <aside
+            style={{
+              display: "var(--docs-toc-display)",
+              position: "sticky",
+              top: 24,
+              flexDirection: "column",
+              gap: 4,
+              padding: "20px 16px",
+              borderRadius: 22,
+              background: "rgba(255,255,255,.42)",
+              border: "1px solid rgba(255,255,255,.78)",
+            }}
+          >
+            <div
               style={{
-                display: "flex",
-                position: "sticky",
-                top: 24,
-                flexDirection: "column",
-                gap: 4,
-                padding: "20px 16px",
-                borderRadius: 22,
-                background: "rgba(255,255,255,.42)",
-                border: "1px solid rgba(255,255,255,.78)",
+                fontSize: 11,
+                fontWeight: 600,
+                letterSpacing: ".09em",
+                textTransform: "uppercase",
+                opacity: 0.4,
+                padding: "0 10px 8px",
               }}
             >
-              <div
+              On this page
+            </div>
+            {DOCS_SECTIONS.map((t) => (
+              <a
+                key={t.id}
+                href={`#${t.id}`}
                 style={{
-                  fontSize: 11,
-                  fontWeight: 600,
-                  letterSpacing: ".09em",
-                  textTransform: "uppercase",
-                  opacity: 0.4,
-                  padding: "0 10px 8px",
+                  padding: "6px 10px",
+                  borderRadius: 9,
+                  fontSize: 13.5,
+                  color: active === t.id ? "#4c46b8" : "rgba(38,35,74,.6)",
+                  background:
+                    active === t.id ? "rgba(255,255,255,.85)" : "transparent",
                 }}
               >
-                On this page
-              </div>
-              {DOCS_SECTIONS.map((t) => (
-                <a
-                  key={t.id}
-                  href={`#${t.id}`}
-                  style={{
-                    padding: "6px 10px",
-                    borderRadius: 9,
-                    fontSize: 13.5,
-                    color: active === t.id ? "#4c46b8" : "rgba(38,35,74,.6)",
-                    background:
-                      active === t.id ? "rgba(255,255,255,.85)" : "transparent",
-                  }}
-                >
-                  {t.label}
-                </a>
-              ))}
-            </aside>
-          )}
+                {t.label}
+              </a>
+            ))}
+          </aside>
         </div>
       </div>
     </div>

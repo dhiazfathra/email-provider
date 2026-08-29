@@ -15,7 +15,7 @@ export default function MailPopupScreen() {
   return (
     <>
       <div style={{ flex: 1, minHeight: 0, display: "grid" }}>
-        <EmailList compact={isMobile} />
+        <EmailList compact={false} />
       </div>
       <div
         style={{

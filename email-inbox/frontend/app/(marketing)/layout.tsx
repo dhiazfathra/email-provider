@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FOOTER_LINKS, NAV_LINKS } from "@/lib/mock/marketing";
-import { useViewport } from "@/lib/useViewport";
 import { PRIMARY } from "./ui";
 
 export default function MarketingLayout({
@@ -12,7 +11,6 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { mob } = useViewport();
 
   return (
     <div
@@ -123,30 +121,30 @@ export default function MarketingLayout({
               Pane
             </span>
           </Link>
-          {!mob && (
-            <nav style={{ display: "flex", gap: 4, marginLeft: 14 }}>
-              {NAV_LINKS.map((l) => {
-                const on = pathname === l.href;
-                return (
-                  <Link
-                    key={l.href}
-                    href={l.href}
-                    aria-current={on ? "page" : undefined}
-                    style={{
-                      padding: "9px 14px",
-                      borderRadius: 12,
-                      fontSize: 14,
-                      fontWeight: on ? 600 : 400,
-                      color: on ? "#4c46b8" : "rgba(38,35,74,.68)",
-                      background: on ? "rgba(255,255,255,.8)" : "transparent",
-                    }}
-                  >
-                    {l.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          )}
+          <nav
+            style={{ display: "var(--nav-display)", gap: 4, marginLeft: 14 }}
+          >
+            {NAV_LINKS.map((l) => {
+              const on = pathname === l.href;
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  aria-current={on ? "page" : undefined}
+                  style={{
+                    padding: "9px 14px",
+                    borderRadius: 12,
+                    fontSize: 14,
+                    fontWeight: on ? 600 : 400,
+                    color: on ? "#4c46b8" : "rgba(38,35,74,.68)",
+                    background: on ? "rgba(255,255,255,.8)" : "transparent",
+                  }}
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
+          </nav>
           <div style={{ flex: 1 }} />
           <Link
             href="/signin"

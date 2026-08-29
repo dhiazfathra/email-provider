@@ -1,19 +1,17 @@
 "use client";
 
-import { useViewport } from "@/lib/useViewport";
 import { KEYS, SNIPPET } from "@/lib/mock/console";
 import { Card, CodeBlock, MONO } from "../ui";
 
 export default function ConsoleKeys() {
-  const { narrow, mob } = useViewport();
-  const cols = mob ? "minmax(0,1fr) auto" : "minmax(0,1fr) 130px 90px";
+  const cols = "var(--key-cols)";
 
   return (
     <section
       style={{
         marginTop: 24,
         display: "grid",
-        gridTemplateColumns: narrow ? "1fr" : "minmax(0,1.7fr) minmax(0,1fr)",
+        gridTemplateColumns: "var(--console-split-cols)",
         gap: 14,
         alignItems: "start",
       }}
@@ -45,24 +43,23 @@ export default function ConsoleKeys() {
                 {k.token}
               </div>
             </div>
-            {!mob && (
-              <span
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  padding: "4px 10px",
-                  borderRadius: 9,
-                  background:
-                    k.scope === "Full access"
-                      ? "rgba(124,126,242,.18)"
-                      : "rgba(103,232,249,.22)",
-                  color: "#4c46b8",
-                  justifySelf: "start",
-                }}
-              >
-                {k.scope}
-              </span>
-            )}
+            <span
+              className="wide-only"
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                padding: "4px 10px",
+                borderRadius: 9,
+                background:
+                  k.scope === "Full access"
+                    ? "rgba(124,126,242,.18)"
+                    : "rgba(103,232,249,.22)",
+                color: "#4c46b8",
+                justifySelf: "start",
+              }}
+            >
+              {k.scope}
+            </span>
             <span style={{ fontSize: 12.5, opacity: 0.5, textAlign: "right" }}>
               {k.used}
             </span>
