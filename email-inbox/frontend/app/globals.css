@@ -1,0 +1,48 @@
+/* Fonts are self-hosted by next/font in app/fonts.ts — no external stylesheet. */
+:root {
+  --pane-ink: #26234a;
+  --pane-indigo: #5b57c8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #eef2ff;
+  color: var(--pane-ink);
+}
+
+a {
+  color: var(--pane-indigo);
+  text-decoration: none;
+}
+
+a:hover {
+  color: #3f3ba6;
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -3%, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.drift {
+  animation: drift 22s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift {
+    animation: none;
+  }
+}
