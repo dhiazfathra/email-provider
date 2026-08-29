@@ -1,0 +1,12 @@
+.DS_Store
+.serena/
+.procoder/state/
+.claude/settings.local.json
+.tokensave
+node_modules/
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+.env*.local
