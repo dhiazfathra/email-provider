@@ -3,6 +3,9 @@
  * it — see `app/console/console.contract.md`.
  */
 
+import { MESSAGES, type Message } from "@/lib/data/messages";
+import type { Range } from "@/lib/ranges";
+
 export const T1 = "linear-gradient(140deg,#7c7ef2,#a78bfa)";
 export const T2 = "linear-gradient(140deg,#7dd3fc,#818cf8)";
 export const T3 = "linear-gradient(140deg,#67e8f9,#5eead4)";
@@ -67,8 +70,6 @@ export const PAGE_META: Record<string, { title: string; blurb: string }> = {
       "Every configuration change made in this project, who made it and from where.",
   },
 };
-
-import type { Range } from "@/lib/ranges";
 
 /** Scales the illustrative KPI set by the selected window (D14: derived, not stored). */
 const RANGE_SCALE: Record<Range, number> = { "24h": 0.08, "7d": 1, "30d": 4.1 };
@@ -152,114 +153,6 @@ export const REPUTATION = [
   { label: "Apple iCloud", value: "91.3", color: "#6d4fd6" },
 ];
 
-export type EventStatus = "Delivered" | "Opened" | "Bounced" | "Deferred";
-
-export const STATUS_TINT: Record<EventStatus, [string, string]> = {
-  Delivered: ["rgba(94,234,212,.24)", "#0e8f80"],
-  Opened: ["rgba(124,126,242,.16)", "#4c46b8"],
-  Bounced: ["rgba(192,132,252,.22)", "#8b5cf6"],
-  Deferred: ["rgba(167,139,250,.16)", "#6d4fd6"],
-};
-
-/** `GET /v2/projects/{projectId}/messages?status=&limit=` */
-export const EVENTS: {
-  to: string;
-  subject: string;
-  stream: string;
-  status: EventStatus;
-  time: string;
-  id: string;
-}[] = [
-  {
-    to: "ana.ferreira@northloop.io",
-    subject: "Your Harbor receipt #48213",
-    stream: "receipts",
-    status: "Delivered",
-    time: "9:41:02",
-    id: "msg_01J8K2QF7ZP",
-  },
-  {
-    to: "dev+ci@bridgeworks.dev",
-    subject: "Reset your password",
-    stream: "transactional",
-    status: "Delivered",
-    time: "9:40:58",
-    id: "msg_01J8K2QF3XA",
-  },
-  {
-    to: "t.okonkwo@lattice.co",
-    subject: "Invite to the Atlas workspace",
-    stream: "transactional",
-    status: "Opened",
-    time: "9:40:31",
-    id: "msg_01J8K2QDR1M",
-  },
-  {
-    to: "billing@vantage-group.com",
-    subject: "Invoice AUG-2026 is ready",
-    stream: "receipts",
-    status: "Delivered",
-    time: "9:39:47",
-    id: "msg_01J8K2QBB9C",
-  },
-  {
-    to: "nils@havnfoto.no",
-    subject: "Weekly digest — 12 new items",
-    stream: "broadcast",
-    status: "Bounced",
-    time: "9:39:12",
-    id: "msg_01J8K2Q8W4E",
-  },
-  {
-    to: "s.rahman@pixelforge.studio",
-    subject: "Your export finished",
-    stream: "notifications",
-    status: "Delivered",
-    time: "9:38:55",
-    id: "msg_01J8K2Q6T2H",
-  },
-  {
-    to: "no-reply-test@mailsink.dev",
-    subject: "Verification code 448 201",
-    stream: "transactional",
-    status: "Deferred",
-    time: "9:38:20",
-    id: "msg_01J8K2Q4K7R",
-  },
-  {
-    to: "claire@meridian.partners",
-    subject: "Seat added to your plan",
-    stream: "notifications",
-    status: "Delivered",
-    time: "9:37:44",
-    id: "msg_01J8K2Q1N8D",
-  },
-  {
-    to: "ops@sunfleet.se",
-    subject: "Fleet report for 28 August",
-    stream: "broadcast",
-    status: "Opened",
-    time: "9:37:09",
-    id: "msg_01J8K2PXZ3V",
-  },
-  {
-    to: "h.tanaka@kotomi.jp",
-    subject: "Your Harbor receipt #48212",
-    stream: "receipts",
-    status: "Delivered",
-    time: "9:36:31",
-    id: "msg_01J8K2PVQ6B",
-  },
-];
-
-export const EVENT_FILTERS = [
-  { label: "All", count: "1,462", dot: "#7c7ef2" },
-  { label: "Delivered", count: "1,401", dot: "#5eead4" },
-  { label: "Opened", count: "892", dot: "#67e8f9" },
-  { label: "Bounced", count: "6", dot: "#c084fc" },
-  { label: "Deferred", count: "9", dot: "#a78bfa" },
-];
-
 const PAYLOAD_TEMPLATE: [string, string][] = [
   ["{", "#dcd9ff"],
   ['  "id": "%ID%",', "#a5b4fc"],
@@ -274,15 +167,15 @@ const PAYLOAD_TEMPLATE: [string, string][] = [
 
 /** `GET /v2/projects/{projectId}/messages/{messageId}` */
 export function messageDetail(index: number) {
-  const row = EVENTS[index];
+  const row: Message | undefined = MESSAGES[index];
   if (!row) return null;
-  const bounced = row.status === "Bounced";
+  const bounced = row.state === "bounced";
   return {
     ...row,
     trace: [
       {
         step: "Accepted by API",
-        detail: `POST /v2/send · 202 · ${row.time}`,
+        detail: `POST /v2/send · 202`,
         dot: "#7c7ef2",
         line: "rgba(124,126,242,.3)",
       },
@@ -299,7 +192,7 @@ export function messageDetail(index: number) {
         line: "rgba(124,126,242,.3)",
       },
       {
-        step: row.status,
+        step: row.state,
         detail: bounced
           ? "550 5.1.1 recipient rejected"
           : "250 2.0.0 OK · 412 ms",

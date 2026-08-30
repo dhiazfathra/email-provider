@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import {
-  EVENTS,
-  EVENT_FILTERS,
-  messageDetail,
-  STATUS_TINT,
-} from "@/lib/mock/console";
+import { MESSAGES, messageCounts } from "@/lib/data/messages";
+import { MESSAGE_STATES } from "@/lib/enums";
+import { formatCount } from "@/lib/format";
+import { stateTint } from "@/lib/theme";
+import { messageDetail } from "@/lib/mock/console";
 import {
   Card,
   CodeBlock,
@@ -16,15 +15,27 @@ import {
   MONO,
   Tag,
 } from "../ui";
+import { SentAt } from "./sent-at";
+
+const STATE_DOT: Record<(typeof MESSAGE_STATES)[number], string> = {
+  queued: "#7c7ef2",
+  delivered: "#5eead4",
+  bounced: "#c084fc",
+  deferred: "#a78bfa",
+  suppressed: "#94a3b8",
+};
 
 export default function ConsoleActivity() {
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState<"All" | (typeof MESSAGE_STATES)[number]>(
+    "All",
+  );
   const [selected, setSelected] = useState(2);
 
   const cols = "var(--log-cols)";
+  const counts = messageCounts();
 
-  const rows = EVENTS.map((e, i) => ({ ...e, index: i })).filter(
-    (e) => filter === "All" || e.status === filter,
+  const rows = MESSAGES.map((e, i) => ({ ...e, index: i })).filter(
+    (e) => filter === "All" || e.state === filter,
   );
   const detail = messageDetail(selected);
 
@@ -38,14 +49,21 @@ export default function ConsoleActivity() {
           gap: 8,
         }}
       >
-        {EVENT_FILTERS.map((f) => (
+        <FilterChip
+          label="All"
+          count={formatCount(MESSAGES.length)}
+          dot="#7c7ef2"
+          active={filter === "All"}
+          onClick={() => setFilter("All")}
+        />
+        {MESSAGE_STATES.map((s) => (
           <FilterChip
-            key={f.label}
-            label={f.label}
-            count={f.count}
-            dot={f.dot}
-            active={filter === f.label}
-            onClick={() => setFilter(f.label)}
+            key={s}
+            label={s}
+            count={formatCount(counts[s] ?? 0)}
+            dot={STATE_DOT[s]}
+            active={filter === s}
+            onClick={() => setFilter(s)}
           />
         ))}
       </section>
@@ -75,7 +93,7 @@ export default function ConsoleActivity() {
         </div>
         {rows.map((e) => {
           const on = e.index === selected;
-          const [tagBg, tagColor] = STATUS_TINT[e.status];
+          const { bg: tagBg, fg: tagColor } = stateTint(e.state);
           return (
             <button
               key={e.id}
@@ -121,7 +139,7 @@ export default function ConsoleActivity() {
                 color={tagColor}
                 style={{ justifySelf: "start", display: "var(--wide-only)" }}
               >
-                {e.status}
+                {e.state}
               </Tag>
               <span
                 style={{
@@ -131,7 +149,7 @@ export default function ConsoleActivity() {
                   whiteSpace: "nowrap",
                 }}
               >
-                {e.time}
+                <SentAt iso={e.sent_at} />
               </span>
             </button>
           );
@@ -166,10 +184,10 @@ export default function ConsoleActivity() {
               {detail.subject}
             </div>
             <Tag
-              bg={STATUS_TINT[detail.status][0]}
-              color={STATUS_TINT[detail.status][1]}
+              bg={stateTint(detail.state).bg}
+              color={stateTint(detail.state).fg}
             >
-              {detail.status}
+              {detail.state}
             </Tag>
             <div style={{ flex: 1 }} />
             <span style={{ fontFamily: MONO, fontSize: 12, opacity: 0.45 }}>
