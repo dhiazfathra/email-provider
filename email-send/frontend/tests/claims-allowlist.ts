@@ -1,0 +1,81 @@
+/**
+ * Numerals allowed in product copy despite not being decisions.
+ * Every entry states why. An allowlist is a hiding place — the reason is what
+ * makes hiding visible (spec risk R2).
+ */
+export const ALLOWED_NUMERALS = [
+  { value: "2", reason: "API version, as in /v2/send" },
+  { value: "200", reason: "HTTP status in the errors table" },
+  { value: "202", reason: "HTTP status in the errors table" },
+  { value: "400", reason: "HTTP status in the errors table" },
+  { value: "401", reason: "HTTP status in the errors table" },
+  { value: "403", reason: "HTTP status in the errors table" },
+  { value: "404", reason: "HTTP status in the errors table" },
+  { value: "409", reason: "HTTP status in the errors table" },
+  { value: "422", reason: "HTTP status in the errors table" },
+  { value: "429", reason: "HTTP status in the errors table" },
+  { value: "500", reason: "HTTP status in the errors table" },
+  { value: "503", reason: "HTTP status in the errors table" },
+  { value: "67", reason: "fragment of the hex colour #67e8f9" },
+  { value: "140", reason: "gradient angle in decorative tints, not a metric" },
+  { value: "818", reason: "fragment of the hex colour #818cf8" },
+  { value: "48.00", reason: "illustrative amount in a sample request payload" },
+  { value: "2291", reason: "illustrative order id in a sample payload" },
+  { value: "1756458842", reason: "illustrative webhook signature timestamp" },
+  { value: "1756458841", reason: "illustrative SMTP response sample" },
+  { value: "250", reason: "illustrative SMTP response code, not a claim" },
+  { value: "2.0.0", reason: "illustrative SMTP enhanced status code" },
+  { value: "20020", reason: "fragment of a sample SMTP relay hostname" },
+  { value: "10 M", reason: "regex fragment of the 10 MB attachment limit" },
+  { value: "10", reason: "the 10 in the 10 MB attachment limit" },
+  { value: "78", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "084", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "09", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "3B", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "03", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "64", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "07", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "50", reason: "recipient cap per send call, a real API constraint" },
+  { value: "256", reason: "the 256 in HMAC-SHA256, an algorithm name" },
+  { value: "29", reason: "day fragment of the illustrative accepted_at date" },
+  { value: "09", reason: "hour fragment of the illustrative accepted_at time" },
+  {
+    value: "02",
+    reason: "second fragment of the illustrative accepted_at time",
+  },
+  { value: "9", reason: "digit fragment of an illustrative sample timestamp" },
+];
+
+/**
+ * Phrases that are promises regardless of whether they carry a number.
+ * A numeric scan never catches "industry-leading uptime" (spec risk R3).
+ */
+export const FORBIDDEN_PHRASES = [
+  "SLA",
+  "uptime",
+  "guarantee",
+  "guaranteed",
+  "industry-leading",
+  "SSO",
+  "SCIM",
+  "data residency",
+  "within an hour",
+  "under an hour",
+];
+
+/**
+ * Fabricated values deleted from copy in PR 3. Blocked even though they still
+ * appear in the decisions record's own prose narrating their deletion —
+ * finding them in copy again means the claim came back (spec risk R2).
+ */
+export const DELETED_NUMERALS = [
+  "99.31%",
+  "180 ms",
+  "4.1B",
+  "412 ms",
+  "30 d",
+  "98.7%",
+  "96.2%",
+  "94.8%",
+  "91.3%",
+];

@@ -1,21 +1,44 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import { useViewport } from "@/lib/useViewport";
 import {
   CHART_LEGEND,
   deliverySeries,
-  KPIS,
   REPUTATION,
   sparkBars,
   STREAMS,
 } from "@/lib/mock/console";
+import { getMetrics, type Kpi } from "@/lib/api/metrics";
+import { formatCount } from "@/lib/format";
+import { DEFAULT_RANGE, isRange } from "@/lib/ranges";
 import { Card } from "./ui";
 
+const CHART_POINTS = { "24h": 8, "7d": 14, "30d": 30 } as const;
+
 export default function ConsoleOverview() {
+  return (
+    <Suspense fallback={null}>
+      <ConsoleOverviewInner />
+    </Suspense>
+  );
+}
+
+function ConsoleOverviewInner() {
   const { mob } = useViewport();
+  const searchParams = useSearchParams();
+  const rangeParam = searchParams.get("range") ?? undefined;
+  const range = isRange(rangeParam) ? rangeParam : DEFAULT_RANGE;
+  const [KPIS, setKPIS] = useState<Kpi[]>([]);
+  useEffect(() => {
+    getMetrics({ range }).then(setKPIS);
+  }, [range]);
   // Bar counts change the number of DOM nodes, not the box they sit in, so
   // this one stays in JS — it cannot shift the layout.
-  const chart = deliverySeries(mob ? 7 : 14);
+  const chart = deliverySeries(
+    mob ? Math.min(7, CHART_POINTS[range]) : CHART_POINTS[range],
+  );
 
   return (
     <>
@@ -56,16 +79,18 @@ export default function ConsoleOverview() {
                   letterSpacing: "-.035em",
                 }}
               >
-                {k.value}
+                {k.unit === "pct" ? `${k.value}%` : formatCount(k.value)}
               </span>
               <span
                 style={{
                   fontSize: 12.5,
                   fontWeight: 600,
-                  color: k.deltaColor,
+                  color: k.delta < 0 ? "#8b5cf6" : "#0e8f80",
                 }}
               >
+                {k.delta > 0 ? "+" : ""}
                 {k.delta}
+                {k.unit === "pct" ? "%" : ""}
               </span>
             </div>
             <div
@@ -78,7 +103,7 @@ export default function ConsoleOverview() {
                 height: 30,
               }}
             >
-              {sparkBars(mob ? 16 : 22, i + 1, k.dip).map((b, j) => (
+              {sparkBars(mob ? 16 : 22, i + 1, k.delta < 0).map((b, j) => (
                 <span
                   key={j}
                   style={{

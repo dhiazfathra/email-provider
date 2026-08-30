@@ -1,9 +1,10 @@
-"use client";
-
-import { DOMAINS } from "@/lib/mock/console";
+import { listDomains } from "@/lib/api/domains";
 import { Card, ELLIPSIS, MONO, Tag } from "../ui";
 
-export default function ConsoleDomains() {
+const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
+
+export default async function ConsoleDomains() {
+  const DOMAINS = await listDomains();
   return (
     <section
       style={{
@@ -14,7 +15,7 @@ export default function ConsoleDomains() {
       }}
     >
       {DOMAINS.map((d) => {
-        const verified = d.state === "Verified";
+        const verified = d.state === "verified";
         return (
           <Card
             key={d.name}
@@ -45,7 +46,7 @@ export default function ConsoleDomains() {
                 bg={verified ? "rgba(94,234,212,.24)" : "rgba(167,139,250,.2)"}
                 color={verified ? "#0e8f80" : "#6d4fd6"}
               >
-                {d.state}
+                {cap(d.state)}
               </Tag>
               <div style={{ flex: 1 }} />
               <span style={{ fontSize: 13, opacity: 0.5 }}>{d.volume}</span>
@@ -93,7 +94,7 @@ export default function ConsoleDomains() {
                         color: r.ok ? "#0e8f80" : "#8b5cf6",
                       }}
                     >
-                      {r.state}
+                      {cap(r.state)}
                     </span>
                   </div>
                   <div

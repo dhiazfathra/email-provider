@@ -6,13 +6,8 @@ import {
   CODE,
   FEATURES,
   FOOTER_LINKS,
-  HERO_STATS,
   LANGS,
-  MINI_STATS,
   NAV_LINKS,
-  PLANS,
-  PROVIDERS,
-  SDKS,
   type CodeLang,
 } from "@/lib/mock/landing";
 
@@ -141,7 +136,7 @@ export default function PlumeLanding() {
             {NAV_LINKS.map((l) => (
               <Link
                 key={l}
-                href={l === "Docs" ? "/docs" : "#"}
+                href={l === "Docs" ? "/docs" : "/console"}
                 style={{
                   padding: "9px 14px",
                   borderRadius: 12,
@@ -283,31 +278,6 @@ export default function PlumeLanding() {
                 Open the console
               </Link>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 26,
-                marginTop: 34,
-              }}
-            >
-              {HERO_STATS.map((s) => (
-                <div key={s.label}>
-                  <div
-                    style={{
-                      fontSize: 22,
-                      fontWeight: 600,
-                      letterSpacing: "-.02em",
-                    }}
-                  >
-                    {s.value}
-                  </div>
-                  <div style={{ fontSize: 12.5, opacity: 0.5, marginTop: 2 }}>
-                    {s.label}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
           <div
@@ -366,39 +336,6 @@ export default function PlumeLanding() {
                 </div>
               ))}
             </pre>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3,minmax(0,1fr))",
-                gap: 6,
-                padding: "12px 4px 4px",
-              }}
-            >
-              {MINI_STATS.map((m) => (
-                <div
-                  key={m.label}
-                  style={{
-                    padding: "12px 13px",
-                    borderRadius: 15,
-                    background: "rgba(255,255,255,.65)",
-                    border: "1px solid rgba(255,255,255,.9)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 17,
-                      fontWeight: 600,
-                      letterSpacing: "-.025em",
-                    }}
-                  >
-                    {m.value}
-                  </div>
-                  <div style={{ fontSize: 11.5, opacity: 0.48, marginTop: 2 }}>
-                    {m.label}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
@@ -487,312 +424,11 @@ export default function PlumeLanding() {
           </div>
         </section>
 
-        <section
-          style={{
-            marginTop: 56,
-            display: "grid",
-            gridTemplateColumns: "var(--split-cols)",
-            gap: 16,
-            alignItems: "start",
-          }}
-        >
-          <div
-            style={{
-              padding: 30,
-              borderRadius: 26,
-              background: "rgba(255,255,255,.55)",
-              backdropFilter: "blur(22px)",
-              WebkitBackdropFilter: "blur(22px)",
-              border: "1px solid rgba(255,255,255,.88)",
-              boxShadow: "0 28px 66px -48px rgba(76,66,160,.7)",
-            }}
-          >
-            <h2
-              style={{
-                margin: 0,
-                fontSize: h2,
-                fontWeight: 600,
-                letterSpacing: "-.03em",
-              }}
-            >
-              Deliverability is the product
-            </h2>
-            <p
-              style={{
-                margin: "12px 0 0",
-                fontSize: 15.5,
-                lineHeight: 1.6,
-                opacity: 0.55,
-                maxWidth: 460,
-                textWrap: "pretty",
-              }}
-            >
-              Dedicated IPs warm themselves on a schedule you can see.
-              Suppression lists are enforced before a send is accepted, not
-              after it bounces.
-            </p>
-            <div
-              style={{
-                marginTop: 24,
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-              }}
-            >
-              {PROVIDERS.map((p, i) => (
-                <div
-                  key={p.name}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "minmax(0,1fr) auto 68px",
-                    gap: 14,
-                    alignItems: "center",
-                    padding: "12px 14px",
-                    borderRadius: 16,
-                    background: i % 2 ? "transparent" : "rgba(255,255,255,.55)",
-                  }}
-                >
-                  <span style={{ fontSize: 14 }}>{p.name}</span>
-                  <div
-                    style={{
-                      width: "var(--bar-w)",
-                      height: 7,
-                      borderRadius: 5,
-                      background: "rgba(124,126,242,.14)",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: p.pct,
-                        height: "100%",
-                        borderRadius: 5,
-                        background: "linear-gradient(90deg,#7c7ef2,#67e8f9)",
-                      }}
-                    />
-                  </div>
-                  <span
-                    style={{
-                      fontSize: 13.5,
-                      fontWeight: 600,
-                      textAlign: "right",
-                    }}
-                  >
-                    {p.rate}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: 16, fontSize: 12.5, opacity: 0.45 }}>
-              Inbox placement across seed accounts, 30-day rolling average.
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {SDKS.map((s) => (
-              <div
-                key={s.title}
-                style={{
-                  padding: 24,
-                  borderRadius: 24,
-                  background: "rgba(255,255,255,.55)",
-                  backdropFilter: "blur(20px)",
-                  WebkitBackdropFilter: "blur(20px)",
-                  border: "1px solid rgba(255,255,255,.88)",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: 16.5,
-                    fontWeight: 600,
-                    letterSpacing: "-.015em",
-                  }}
-                >
-                  {s.title}
-                </div>
-                <div
-                  style={{
-                    marginTop: 7,
-                    fontSize: 14,
-                    lineHeight: 1.6,
-                    opacity: 0.55,
-                    textWrap: "pretty",
-                  }}
-                >
-                  {s.body}
-                </div>
-                <div
-                  style={{
-                    marginTop: 14,
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 7,
-                  }}
-                >
-                  {s.chips.map((c) => (
-                    <span
-                      key={c}
-                      style={{
-                        padding: "6px 11px",
-                        borderRadius: 11,
-                        fontFamily: "var(--font-jetbrains-mono), monospace",
-                        fontSize: 12,
-                        color: "#4c46b8",
-                        background: "rgba(124,126,242,.13)",
-                      }}
-                    >
-                      {c}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
         <section style={{ marginTop: 56 }}>
-          <h2
-            style={{
-              margin: 0,
-              fontSize: h2,
-              fontWeight: 600,
-              letterSpacing: "-.03em",
-            }}
-          >
-            Pay for what leaves the building
-          </h2>
-          <p
-            style={{
-              margin: "12px 0 26px",
-              fontSize: 16,
-              opacity: 0.55,
-              maxWidth: 520,
-            }}
-          >
-            Priced per message, no seat charges, no separate bill for the API.
-            Bulk streams and transactional streams cost the same.
+          <p style={{ fontSize: 15, opacity: 0.6, textWrap: "pretty" }}>
+            Plume is a proof of concept. There is no pricing yet, and nothing
+            here is for sale.
           </p>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "var(--plan-cols)",
-              gap: 16,
-              alignItems: "start",
-            }}
-          >
-            {PLANS.map((p) => (
-              <div
-                key={p.name}
-                style={{
-                  padding: 28,
-                  borderRadius: 26,
-                  background: p.hero
-                    ? "rgba(255,255,255,.78)"
-                    : "rgba(255,255,255,.5)",
-                  backdropFilter: "blur(22px)",
-                  WebkitBackdropFilter: "blur(22px)",
-                  border: `1px solid ${p.hero ? "rgba(124,126,242,.4)" : "rgba(255,255,255,.85)"}`,
-                  boxShadow: "0 30px 70px -46px rgba(76,66,160,.7)",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span
-                    style={{
-                      fontSize: 17,
-                      fontWeight: 600,
-                      letterSpacing: "-.02em",
-                    }}
-                  >
-                    {p.name}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 600,
-                      padding: "3px 9px",
-                      borderRadius: 8,
-                      background: p.hero ? "#7c7ef2" : "rgba(124,126,242,.14)",
-                      color: p.hero ? "#fff" : "#5b57c8",
-                    }}
-                  >
-                    {p.tag}
-                  </span>
-                </div>
-                <div
-                  style={{
-                    marginTop: 18,
-                    display: "flex",
-                    alignItems: "baseline",
-                    gap: 6,
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: 40,
-                      fontWeight: 600,
-                      letterSpacing: "-.035em",
-                    }}
-                  >
-                    {p.price}
-                  </span>
-                  <span style={{ fontSize: 14, opacity: 0.5 }}>{p.unit}</span>
-                </div>
-                <div
-                  style={{
-                    marginTop: 8,
-                    fontSize: 14,
-                    opacity: 0.55,
-                    lineHeight: 1.55,
-                    textWrap: "pretty",
-                  }}
-                >
-                  {p.blurb}
-                </div>
-                <Link
-                  href="/console"
-                  style={{
-                    display: "block",
-                    marginTop: 20,
-                    textAlign: "center",
-                    padding: 13,
-                    borderRadius: 14,
-                    fontSize: 14.5,
-                    fontWeight: 500,
-                    color: p.hero ? "#fff" : "#5b57c8",
-                    background: p.hero ? PRIMARY : "rgba(255,255,255,.8)",
-                    border: `1px solid ${p.hero ? "transparent" : "rgba(255,255,255,.95)"}`,
-                  }}
-                >
-                  {p.cta}
-                </Link>
-                <div
-                  style={{
-                    marginTop: 20,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 9,
-                  }}
-                >
-                  {p.items.map((it) => (
-                    <div
-                      key={it}
-                      style={{
-                        display: "flex",
-                        gap: 9,
-                        alignItems: "flex-start",
-                        fontSize: 14,
-                        opacity: 0.62,
-                      }}
-                    >
-                      <span style={{ color: "#7c7ef2", fontWeight: 600 }}>
-                        ✓
-                      </span>
-                      <span>{it}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
         </section>
 
         <section
@@ -841,7 +477,8 @@ export default function PlumeLanding() {
               minWidth: 260,
             }}
           >
-            <div
+            <form
+              onSubmit={(e) => e.preventDefault()}
               style={{
                 display: "flex",
                 gap: 8,
@@ -855,6 +492,7 @@ export default function PlumeLanding() {
                 type="email"
                 placeholder="you@company.com"
                 aria-label="Work email"
+                disabled
                 style={{
                   flex: 1,
                   minWidth: 0,
@@ -867,23 +505,27 @@ export default function PlumeLanding() {
                   color: "#26234a",
                 }}
               />
-              <Link
-                href="/console"
+              <button
+                type="submit"
+                disabled
                 style={{
                   padding: "11px 19px",
                   borderRadius: 12,
                   fontSize: 14.5,
                   fontWeight: 500,
+                  fontFamily: "inherit",
                   color: "#fff",
                   background: PRIMARY,
+                  border: "none",
+                  cursor: "not-allowed",
                 }}
               >
                 Start
-              </Link>
-            </div>
-            <div style={{ fontSize: 12.5, opacity: 0.45, paddingLeft: 6 }}>
-              3,000 messages a month free. No card required.
-            </div>
+              </button>
+            </form>
+            <p style={{ fontSize: 12.5, opacity: 0.55, paddingLeft: 6 }}>
+              Sign-up opens when the API does.
+            </p>
           </div>
         </section>
 
@@ -915,7 +557,7 @@ export default function PlumeLanding() {
             {FOOTER_LINKS.map((l) => (
               <Link
                 key={l}
-                href={l === "Docs" ? "/docs" : "#"}
+                href={l === "Docs" ? "/docs" : "/console"}
                 style={{ color: "inherit" }}
               >
                 {l}

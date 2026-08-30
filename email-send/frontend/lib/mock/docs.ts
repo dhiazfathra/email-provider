@@ -4,22 +4,18 @@
  * one thing that is not static (search).
  */
 
+import { STREAMS, type Stream } from "@/lib/enums";
+import { ACTIVITY_RETENTION_DAYS, SEND_RATE_PER_SECOND } from "@/lib/limits";
+
 const V = "#dcd9ff";
 const K = "#a5b4fc";
 const S = "#67e8f9";
 const G = "#5eead4";
 
-export type DocsLang = "curl" | "node" | "python" | "go";
+export type DocsLang = "curl";
 
 const line = (rows: [string, string][]) =>
   rows.map(([line, color]) => ({ line, color }));
-
-export const DOCS_LANGS: { label: string; id: DocsLang }[] = [
-  { label: "cURL", id: "curl" },
-  { label: "Node", id: "node" },
-  { label: "Python", id: "python" },
-  { label: "Go", id: "go" },
-];
 
 export const QUICKSTART_CODE: Record<
   DocsLang,
@@ -37,46 +33,6 @@ export const QUICKSTART_CODE: Record<
     ["  }'", V],
     ["", V],
     ['→ 202 { "id": "msg_01J8K2QF7ZP" }', G],
-  ]),
-  node: line([
-    ['import { Plume } from "@plume/sdk";', K],
-    ["", V],
-    ["const plume = new Plume(process.env.PLUME_KEY);", V],
-    ["", V],
-    ["const { id } = await plume.send({", V],
-    ['  from: "receipts@harbor.app",', S],
-    ['  to: "ana@northloop.io",', S],
-    ['  template: "receipt-v3",', S],
-    ['  vars: { total: "€48.00" },', S],
-    ["});", V],
-    ["", V],
-    ['// id → "msg_01J8K2QF7ZP"', G],
-  ]),
-  python: line([
-    ["from plume import Plume", K],
-    ["", V],
-    ['plume = Plume(os.environ["PLUME_KEY"])', V],
-    ["", V],
-    ["msg = plume.send(", V],
-    ['    sender="receipts@harbor.app",', S],
-    ['    to="ana@northloop.io",', S],
-    ['    template="receipt-v3",', S],
-    ['    vars={"total": "€48.00"},', S],
-    [")", V],
-    ["", V],
-    ['# msg.id → "msg_01J8K2QF7ZP"', G],
-  ]),
-  go: line([
-    ['client := plume.New(os.Getenv("PLUME_KEY"))', K],
-    ["", V],
-    ["msg, err := client.Send(ctx, &plume.Message{", V],
-    ['    From:     "receipts@harbor.app",', S],
-    ['    To:       []string{"ana@northloop.io"},', S],
-    ['    Template: "receipt-v3",', S],
-    ['    Vars:     plume.Vars{"total": "€48.00"},', S],
-    ["})", V],
-    ["", V],
-    ['// msg.ID → "msg_01J8K2QF7ZP"', G],
   ]),
 };
 
@@ -100,8 +56,7 @@ export const SEND_RESPONSE = line([
   ['  "status": "queued",', S],
   ['  "stream": "receipts",', S],
   ['  "template": "receipt-v3@14",', S],
-  ['  "accepted_at": "2026-08-29T09:14:02Z",', S],
-  ['  "trace_url": "https://plume.email/t/01J8K2QF7ZP"', S],
+  ['  "accepted_at": "2026-08-29T09:14:02Z"', S],
   ["}", V],
 ]);
 
@@ -212,20 +167,16 @@ export const SEND_PARAMS = [
   },
 ];
 
-export const DOC_STREAMS = [
-  {
-    id: "transactional",
-    body: "Default. Receipts, resets, alerts. Highest priority queue.",
-  },
-  {
-    id: "notifications",
-    body: "Digests and activity mail. Throttled behind transactional.",
-  },
-  {
-    id: "bulk",
-    body: "Campaigns and announcements. Separate IPs and reputation.",
-  },
-];
+const DOC_STREAM_BODY: Record<Stream, string> = {
+  transactional: "Default. Receipts, resets, alerts. Highest priority queue.",
+  notifications: "Digests and activity mail. Throttled behind transactional.",
+  bulk: "Campaigns and announcements. Separate IPs and reputation.",
+};
+
+export const DOC_STREAMS = STREAMS.map((id) => ({
+  id,
+  body: DOC_STREAM_BODY[id],
+}));
 
 export const WEBHOOK_EVENTS = [
   "message.queued",
@@ -236,7 +187,6 @@ export const WEBHOOK_EVENTS = [
   "message.complained",
   "message.opened",
   "message.clicked",
-  "domain.record_drift",
 ];
 
 export const API_ERRORS = [
@@ -285,21 +235,9 @@ export const API_ERRORS = [
 ];
 
 export const RATE_LIMITS = [
-  { value: "100 / s", label: "Send calls, free plan" },
-  { value: "1,000 / s", label: "Send calls, Scale plan" },
-  { value: "500", label: "Messages per batch call" },
+  { value: `${SEND_RATE_PER_SECOND} / s`, label: "Send calls" },
   { value: "24 h", label: "Idempotency key window" },
-];
-
-export const SDK_CHIPS = [
-  "node",
-  "python",
-  "go",
-  "ruby",
-  "php",
-  "rust",
-  "smtp.plume.email:587",
-  "STARTTLS",
+  { value: `${ACTIVITY_RETENTION_DAYS} d`, label: "Activity retention" },
 ];
 
 export const DOCS_SECTIONS = [
@@ -309,11 +247,9 @@ export const DOCS_SECTIONS = [
   { id: "templates", label: "Templates and streams" },
   { id: "webhooks", label: "Webhooks" },
   { id: "errors", label: "Errors and rate limits" },
-  { id: "sdks", label: "SDKs and SMTP" },
 ];
 
 export const DOCS_NAV = [
   { group: "Get started", ids: ["quickstart", "authentication"] },
   { group: "API", ids: ["send", "templates", "webhooks", "errors"] },
-  { group: "Libraries", ids: ["sdks"] },
 ];

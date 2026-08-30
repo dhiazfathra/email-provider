@@ -1,9 +1,12 @@
-"use client";
-
-import { KEYS, SNIPPET } from "@/lib/mock/console";
+import { listKeys } from "@/lib/api/keys";
+import { getSnippet } from "@/lib/api/domains";
+import { maskKey } from "@/lib/format";
+import { SentAt } from "../activity/sent-at";
 import { Card, CodeBlock, MONO } from "../ui";
 
-export default function ConsoleKeys() {
+export default async function ConsoleKeys() {
+  const KEYS = await listKeys();
+  const SNIPPET = await getSnippet();
   const cols = "var(--key-cols)";
 
   return (
@@ -19,7 +22,7 @@ export default function ConsoleKeys() {
       <Card alpha={0.5} style={{ padding: 8 }}>
         {KEYS.map((k, i) => (
           <div
-            key={k.token}
+            key={k.prefix}
             style={{
               display: "grid",
               gridTemplateColumns: cols,
@@ -40,7 +43,7 @@ export default function ConsoleKeys() {
                   opacity: 0.45,
                 }}
               >
-                {k.token}
+                {maskKey(k.prefix, k.last4)}
               </div>
             </div>
             <span
@@ -61,7 +64,7 @@ export default function ConsoleKeys() {
               {k.scope}
             </span>
             <span style={{ fontSize: 12.5, opacity: 0.5, textAlign: "right" }}>
-              {k.used}
+              <SentAt iso={k.used_at} />
             </span>
           </div>
         ))}
@@ -93,7 +96,10 @@ export default function ConsoleKeys() {
             cURL
           </span>
         </div>
-        <CodeBlock lines={SNIPPET} style={{ marginTop: 16 }} />
+        <CodeBlock
+          lines={SNIPPET.map((line) => ({ line, color: "#dcd9ff" }))}
+          style={{ marginTop: 16 }}
+        />
       </div>
     </section>
   );

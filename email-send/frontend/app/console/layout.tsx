@@ -1,25 +1,46 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import {
-  NAV,
-  PAGE_META,
-  PROJECT,
-  RANGES,
-  type Range,
-} from "@/lib/mock/console";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { NAV, PAGE_META } from "@/lib/mock/console";
+import { getNavBadges, getProject } from "@/lib/api/project";
+import { formatCount } from "@/lib/format";
+import { DEFAULT_RANGE, RANGES, isRange } from "@/lib/ranges";
 
 export default function ConsoleLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  return (
+    <Suspense fallback={null}>
+      <ConsoleLayoutInner>{children}</ConsoleLayoutInner>
+    </Suspense>
+  );
+}
+
+function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [range, setRange] = useState<Range>("7d");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const rangeParam = searchParams.get("range") ?? undefined;
+  const range = isRange(rangeParam) ? rangeParam : DEFAULT_RANGE;
+  const setRange = (r: (typeof RANGES)[number]) =>
+    router.replace(`${pathname}?range=${r}`, { scroll: false });
 
   const meta = PAGE_META[pathname] ?? PAGE_META["/console"];
+
+  const [project, setProject] = useState<{
+    initial: string;
+    name: string;
+    demo: boolean;
+  } | null>(null);
+  const [navBadge, setNavBadge] = useState<Record<string, number>>({});
+  useEffect(() => {
+    getProject().then(setProject);
+    getNavBadges().then(setNavBadge);
+  }, []);
 
   return (
     <div
@@ -154,10 +175,10 @@ export default function ConsoleLayout({
                   background: "linear-gradient(140deg,#7c7ef2,#a78bfa)",
                 }}
               >
-                {PROJECT.initial}
+                {project?.initial}
               </span>
               <span style={{ fontSize: 14, fontWeight: 500 }}>
-                {PROJECT.name}
+                {project?.name}
               </span>
             </div>
           </div>
@@ -187,7 +208,7 @@ export default function ConsoleLayout({
                     {n.glyph}
                   </span>
                   <span>{n.label}</span>
-                  {n.badge && (
+                  {navBadge[n.href] !== undefined && (
                     <span
                       style={{
                         fontSize: 11,
@@ -198,7 +219,7 @@ export default function ConsoleLayout({
                         color: "#5b57c8",
                       }}
                     >
-                      {n.badge}
+                      {formatCount(navBadge[n.href])}
                     </span>
                   )}
                 </Link>
@@ -208,50 +229,20 @@ export default function ConsoleLayout({
 
           <div style={{ flex: 1 }} />
 
-          <div
-            style={{
-              padding: 15,
-              borderRadius: 18,
-              background: "rgba(255,255,255,.62)",
-              border: "1px solid rgba(255,255,255,.9)",
-            }}
-          >
+          {project?.demo && (
             <div
               style={{
-                display: "flex",
-                alignItems: "baseline",
-                justifyContent: "space-between",
+                padding: "10px 13px",
+                borderRadius: 14,
+                fontSize: 12.5,
+                opacity: 0.55,
+                background: "rgba(255,255,255,.5)",
+                border: "1px solid rgba(255,255,255,.85)",
               }}
             >
-              <span style={{ fontSize: 13, fontWeight: 600 }}>
-                Monthly volume
-              </span>
-              <span style={{ fontSize: 12, opacity: 0.5 }}>
-                {PROJECT.quota.pct}%
-              </span>
+              Demo project — sample data, not live.
             </div>
-            <div
-              style={{
-                marginTop: 9,
-                height: 7,
-                borderRadius: 5,
-                background: "rgba(124,126,242,.16)",
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  width: `${PROJECT.quota.pct}%`,
-                  height: "100%",
-                  borderRadius: 5,
-                  background: "linear-gradient(90deg,#7c7ef2,#67e8f9)",
-                }}
-              />
-            </div>
-            <div style={{ marginTop: 9, fontSize: 12.5, opacity: 0.5 }}>
-              {PROJECT.quota.usedLabel}
-            </div>
-          </div>
+          )}
         </aside>
 
         <main
