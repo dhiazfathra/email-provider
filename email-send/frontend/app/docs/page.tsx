@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   API_ERRORS,
   DOCS_NAV,
@@ -52,6 +52,19 @@ function useActiveSection() {
 
 export default function PlumeDocs() {
   const active = useActiveSection();
+  const [query, setQuery] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   // Responsive values come from CSS variables in globals.css, so the first
   // paint is already correct — see the note there.
@@ -203,9 +216,12 @@ export default function PlumeDocs() {
               ⌕
             </span>
             <input
+              ref={searchRef}
               type="search"
               placeholder="Search the docs"
               aria-label="Search the docs"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
               style={{
                 flex: 1,
                 minWidth: 0,
@@ -264,47 +280,71 @@ export default function PlumeDocs() {
               overflow: "auto",
             }}
           >
-            {DOCS_NAV.map((g) => (
-              <div
-                key={g.group}
-                style={{ display: "flex", flexDirection: "column", gap: 2 }}
-              >
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 600,
-                    letterSpacing: ".09em",
-                    textTransform: "uppercase",
-                    opacity: 0.4,
-                    padding: "0 12px 8px",
-                  }}
-                >
-                  {g.group}
-                </div>
-                {g.ids.map((id) => {
-                  const on = active === id;
-                  return (
-                    <a
-                      key={id}
-                      href={`#${id}`}
-                      aria-current={on ? "true" : undefined}
+            <nav style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+              {DOCS_NAV.map((g) => {
+                const ids = g.ids.filter((id) =>
+                  labelOf(id)
+                    .toLowerCase()
+                    .includes(query.trim().toLowerCase()),
+                );
+                if (ids.length === 0) return null;
+                return (
+                  <div
+                    key={g.group}
+                    style={{ display: "flex", flexDirection: "column", gap: 2 }}
+                  >
+                    <div
                       style={{
-                        padding: "8px 12px",
-                        borderRadius: 11,
-                        fontSize: 14,
-                        fontWeight: on ? 600 : 400,
-                        color: on ? "#4c46b8" : "rgba(38,35,74,.66)",
-                        background: on
-                          ? "rgba(255,255,255,.85)"
-                          : "transparent",
+                        fontSize: 11,
+                        fontWeight: 600,
+                        letterSpacing: ".09em",
+                        textTransform: "uppercase",
+                        opacity: 0.4,
+                        padding: "0 12px 8px",
                       }}
                     >
-                      {labelOf(id)}
-                    </a>
-                  );
-                })}
-              </div>
-            ))}
+                      {g.group}
+                    </div>
+                    {ids.map((id) => {
+                      const on = active === id;
+                      return (
+                        <a
+                          key={id}
+                          href={`#${id}`}
+                          aria-current={on ? "true" : undefined}
+                          style={{
+                            padding: "8px 12px",
+                            borderRadius: 11,
+                            fontSize: 14,
+                            fontWeight: on ? 600 : 400,
+                            color: on ? "#4c46b8" : "rgba(38,35,74,.66)",
+                            background: on
+                              ? "rgba(255,255,255,.85)"
+                              : "transparent",
+                          }}
+                        >
+                          {labelOf(id)}
+                        </a>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+              {DOCS_NAV.every(
+                (g) =>
+                  g.ids.filter((id) =>
+                    labelOf(id)
+                      .toLowerCase()
+                      .includes(query.trim().toLowerCase()),
+                  ).length === 0,
+              ) && (
+                <div
+                  style={{ padding: "0 12px", fontSize: 13.5, opacity: 0.5 }}
+                >
+                  No section matches
+                </div>
+              )}
+            </nav>
           </aside>
 
           <main
