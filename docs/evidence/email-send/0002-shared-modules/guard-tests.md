@@ -12,7 +12,7 @@ cd email-send/frontend && npm test
 
 ## Output
 
-```
+```text
  ✓ tests/enums.test.ts (3 tests) 3ms
  ✓ tests/limits.test.ts (2 tests) 2ms
  ✓ tests/harness.test.ts (1 test) 1ms

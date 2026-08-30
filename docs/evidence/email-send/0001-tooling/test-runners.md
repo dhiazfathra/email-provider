@@ -11,7 +11,7 @@ cd email-send/frontend && npm test
 
 ## Output
 
-```
+```text
 npm notice run test
 npm notice run vitest run
 
@@ -33,7 +33,7 @@ cd email-send/frontend && npm run e2e
 
 ## Output
 
-```
+```text
 npm notice run e2e
 npm notice run playwright test
 [WebServer] npm notice run dev

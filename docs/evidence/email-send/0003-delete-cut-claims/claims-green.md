@@ -12,7 +12,7 @@ cd email-send/frontend && npm test
 
 ## Output
 
-```
+```text
  Test Files  5 passed (5)
       Tests  13 passed (13)
 ```

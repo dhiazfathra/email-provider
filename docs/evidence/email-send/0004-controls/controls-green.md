@@ -6,7 +6,7 @@ no `<form>`) and passes once each control is wired or removed.
 
 ## Before (Task 14, first run)
 
-```
+```text
 5 failed
   e2e/controls.spec.ts:16:7 › / has no dead links
   e2e/controls.spec.ts:23:5 › the range switcher changes what is rendered
@@ -22,7 +22,7 @@ no `<form>`) and passes once each control is wired or removed.
 cd email-send/frontend && npm run e2e
 ```
 
-```
+```text
 Running 14 tests using 2 workers
   ✓ 14 passed (4.3s)
 ```

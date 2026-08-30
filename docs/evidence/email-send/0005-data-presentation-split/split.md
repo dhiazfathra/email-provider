@@ -13,7 +13,7 @@ grep -rnE "#[0-9a-fA-F]{6}|linear-gradient|min ago|••••" lib/data/ ; ech
 
 ## Output
 
-```
+```text
 exit=1
 ```
 
@@ -25,7 +25,7 @@ No matches — the grep's own failure is the proof.
 npm test && npm run e2e
 ```
 
-```
+```text
 Test Files  6 passed (6)
      Tests  15 passed (15)
 ...

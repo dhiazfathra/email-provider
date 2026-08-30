@@ -5,7 +5,7 @@ console page calls an async accessor in `lib/api/`.
 
 ## Before (failing)
 
-```
+```text
  ❯ tests/seam.test.ts:14:21
    expected [ "app/console/activity/page.tsx", "app/console/audit/page.tsx",
      "app/console/domains/page.tsx", "app/console/keys/page.tsx",
@@ -20,7 +20,7 @@ console page calls an async accessor in `lib/api/`.
 cd email-send/frontend && npm test
 ```
 
-```
+```text
  ✓ tests/seam.test.ts (1 test) 3ms
  Test Files  7 passed (7)
       Tests  18 passed (18)
@@ -30,7 +30,7 @@ cd email-send/frontend && npm test
 cd email-send/frontend && npm run e2e
 ```
 
-```
+```text
 Running 14 tests using 2 workers
   14 passed
 ```
