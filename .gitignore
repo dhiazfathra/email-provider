@@ -2,6 +2,7 @@
 .serena/
 .procoder/state/
 .claude/settings.local.json
+.claude/.headroom_wrap_marker.json
 .tokensave
 node_modules/
 .next/
@@ -15,3 +16,4 @@ next-env.d.ts
 .agents/
 agent/
 skills-lock.json
+.claude/skills/
