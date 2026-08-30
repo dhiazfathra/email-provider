@@ -107,96 +107,11 @@ export const FEATURES = [
   },
 ];
 
-export const NAV_LINKS = ["Product", "Deliverability", "Docs", "Pricing"];
+export const NAV_LINKS = ["Product", "Deliverability", "Docs"];
 export const FOOTER_LINKS = [
   "Docs",
   "API reference",
   "Status",
   "Security",
   "Support",
-];
-
-export const HERO_STATS = [
-  { value: "99.31%", label: "Median delivery rate" },
-  { value: "180 ms", label: "API p95 latency" },
-  { value: "4.1B", label: "Messages sent in 2026" },
-];
-
-export const MINI_STATS = [
-  { value: "202", label: "Accepted" },
-  { value: "412 ms", label: "To inbox" },
-  { value: "30 d", label: "Event retention" },
-];
-
-export const PROVIDERS = [
-  { name: "Gmail", rate: "98.7%", pct: "99%" },
-  { name: "Outlook / Hotmail", rate: "96.2%", pct: "96%" },
-  { name: "Yahoo", rate: "94.8%", pct: "95%" },
-  { name: "Apple iCloud", rate: "91.3%", pct: "91%" },
-];
-
-export const SDKS = [
-  {
-    title: "SDKs for the stack you have",
-    body: "Typed clients with retries, idempotency keys and batch send built in. Or skip them and post JSON.",
-    chips: ["node", "python", "go", "ruby", "php", "rust"],
-  },
-  {
-    title: "SMTP relay, if you prefer",
-    body: "Point an existing app at smtp.plume.email and it gets the same streams, traces and suppression rules as the API.",
-    chips: ["smtp.plume.email:587", "STARTTLS", "API key as password"],
-  },
-];
-
-export const PLANS = [
-  {
-    name: "Free",
-    tag: "To try it",
-    price: "$0",
-    unit: "3,000 / month",
-    blurb: "Everything in the API, capped volume, shared IP pool.",
-    items: [
-      "3,000 messages a month",
-      "1 sending domain",
-      "30-day activity retention",
-      "All SDKs and webhooks",
-      "Community support",
-    ],
-    cta: "Get an API key",
-    hero: false,
-  },
-  {
-    name: "Scale",
-    tag: "Most used",
-    price: "$0.40",
-    unit: "per 1,000 sent",
-    blurb:
-      "Pay per message with no floor. Volume discounts apply automatically.",
-    items: [
-      "Unlimited domains and streams",
-      "90-day activity retention",
-      "Dedicated IP available",
-      "Template versioning and rollback",
-      "Email support in under an hour",
-    ],
-    cta: "Start sending",
-    hero: true,
-  },
-  {
-    name: "Enterprise",
-    tag: "High volume",
-    price: "Custom",
-    unit: "from 20M / month",
-    blurb:
-      "Contracted rates, dedicated pools and a named deliverability engineer.",
-    items: [
-      "Managed IP warm-up",
-      "Custom retention and data residency",
-      "SSO, SCIM and audit log",
-      "99.99% uptime SLA",
-      "Named contact and quarterly review",
-    ],
-    cta: "Talk to us",
-    hero: false,
-  },
 ];
