@@ -30,6 +30,7 @@ email-inbox/
   backend/    Go — out of scope for this repository
   frontend/   Next.js 16.3.3 — Pane marketing site and mail app
 docs/adr/     Architecture decision records
+docs/evidence/ Executed proof per app — commands, output, screenshots
 scripts/      build-contracts.py — regenerates API_CONTRACTS.md
 ```
 
@@ -91,3 +92,24 @@ Targets and the measured before/after are in
 - [ADR-0003](docs/adr/0003-api-contract-format.md) — API contract format
 - [ADR-0004](docs/adr/0004-vercel-deployment-configuration.md) — Vercel deployment configuration
 - [ADR-0005](docs/adr/0005-mail-app-screens-as-routes.md) — mockup screens become real routes
+- [ADR-0006](docs/adr/0006-css-variable-breakpoints.md) — responsive layout from CSS variables
+- [ADR-0007](docs/adr/0007-product-decisions-as-single-source-of-truth.md) — product decisions are the single source of truth for claims
+- [ADR-0008](docs/adr/0008-api-returns-raw-values-frontend-owns-presentation.md) — API returns raw values, frontend owns presentation
+- [ADR-0009](docs/adr/0009-poc-scope-no-billing-metering-or-engagement.md) — PoC has no billing, metering or engagement tracking
+- [ADR-0010](docs/adr/0010-webhook-signing-and-idempotency.md) — webhook signing scheme and send idempotency
+
+## Remediation
+
+The Plume frontend was built from unverified design output and shipped 37
+fabricated or contradictory claims. [`FRONTEND_REMEDIATION_PLAN.md`](FRONTEND_REMEDIATION_PLAN.md)
+catalogues them; [`email-send/PRODUCT_DECISIONS.md`](email-send/PRODUCT_DECISIONS.md)
+resolves every one and is the source of truth for any number, enum, limit or
+promise on a Plume surface. The four-spec decomposition — decisions, frontend
+truthing, contract rewrite, backend — is in
+[`docs/superpowers/specs/`](docs/superpowers/specs/), where S1 records the
+decomposition and S2 specifies the frontend work, its seven-PR sequence and its
+risk register. Every remediation PR carries an evidence folder under
+[`docs/evidence/`](docs/evidence/README.md).
+
+- [ADR-0011](docs/adr/0011-vitest-for-data-playwright-for-controls.md) — Vitest for data invariants, Playwright for control behaviour
+- [ADR-0012](docs/adr/0012-evidence-folders-per-app.md) — executed evidence kept per app under `docs/evidence/`

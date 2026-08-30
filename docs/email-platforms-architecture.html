@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Architecture sketch — Mailbox Hosting & Transactional Email</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "neutral",
+        securityLevel: "loose",
+      });
+    </script>
+    <style>
+      .seam {
+        stroke-dasharray: 4 4;
+      }
+      .leak {
+        stroke: #dc2626;
+      }
+      .deep {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+      }
+      body {
+        font-feature-settings: "ss01";
+      }
+    </style>
+  </head>
+  <body class="bg-stone-50 text-slate-900 font-sans">
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-16">
+      <!-- HEADER -->
+      <header class="space-y-3">
+        <h1 class="font-serif text-3xl">
+          Two email platforms — architecture sketch
+        </h1>
+        <p class="text-sm text-slate-500">
+          A) Mailbox hosting (Gmail/Zoho competitor) &nbsp;·&nbsp; B)
+          Transactional/bulk send API (SendGrid/Mailgun competitor)
+        </p>
+        <div
+          class="flex flex-wrap gap-4 text-xs uppercase tracking-wider text-slate-500 pt-2"
+        >
+          <span class="inline-flex items-center gap-1"
+            ><span
+              class="w-4 h-0 border-t-2 border-slate-400 inline-block"
+            ></span>
+            module boundary</span
+          >
+          <span class="inline-flex items-center gap-1"
+            ><span
+              class="w-4 h-0 border-t-2 border-slate-400 seam inline-block"
+            ></span>
+            seam / adapter point</span
+          >
+          <span class="inline-flex items-center gap-1"
+            ><span
+              class="w-4 h-0 border-t-2 border-red-600 inline-block"
+            ></span>
+            deliverability risk edge</span
+          >
+          <span class="inline-flex items-center gap-1"
+            ><span class="w-3 h-3 deep rounded-sm inline-block"></span> deep
+            module (own most complexity)</span
+          >
+        </div>
+      </header>
+
+      <!-- A) MAILBOX HOSTING -->
+      <section id="mailbox-hosting" class="space-y-6">
+        <div class="flex items-baseline gap-3">
+          <h2 class="font-serif text-2xl">A) Mailbox hosting service</h2>
+          <span
+            class="text-xs uppercase tracking-wider bg-amber-100 text-amber-800 px-2 py-0.5 rounded"
+            >Speculative — high build cost</span
+          >
+        </div>
+        <p class="max-w-3xl text-sm text-slate-600">
+          Full mail server as the deep module. You do not implement
+          SMTP/IMAP/spam filtering yourself — Stalwart or Mailcow is the deep
+          module, and your job is provisioning, billing, and the webmail seam on
+          top of it.
+        </p>
+
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <pre class="mermaid">
+flowchart TB
+    subgraph client["Client layer"]
+      WEB["Webmail UI\n(SOGo / Roundcube / custom Flutter Web)"]
+      MUA["Third-party mail clients\n(Outlook, Apple Mail, K-9)"]
+    end
+
+    subgraph edge["Edge / provisioning seam"]
+      API["Go provisioning API\ntenant, domain, mailbox, quota, billing"]
+      ADMIN["Admin console"]
+    end
+
+    subgraph deep["Deep module: mail server core"]
+      direction TB
+      MTA["SMTP (Postfix / Stalwart)\ninbound + outbound routing"]
+      IMAP["IMAP/JMAP (Dovecot / Stalwart)\nmailbox access"]
+      FILTER["Rspamd\nspam, DKIM, DMARC, SPF"]
+      STORE[("Maildir / S3-compatible storage\nMinIO on existing infra")]
+    end
+
+    subgraph reputation["Deliverability layer"]
+      DNS["rDNS + SPF/DKIM/DMARC records"]
+      WARM["IP warmup /\nsmart-host relay (fallback via SES/Mailgun)"]
+      POSTMASTER["Gmail Postmaster Tools\nMS SNDS feedback loops"]
+    end
+
+    WEB -->|IMAP/JMAP| IMAP
+    MUA -->|IMAP/SMTP| IMAP
+    MUA -->|SMTP| MTA
+    API -.provision.-> deep
+    ADMIN --> API
+    MTA --> FILTER
+    FILTER --> STORE
+    IMAP --> STORE
+    MTA <-->|delivery reputation| reputation
+    reputation -.leak risk.-> MTA
+
+    classDef leakclass stroke:#dc2626,stroke-width:2px;
+    class reputation leakclass
+    classDef deepclass fill:#0f172a,color:#f8fafc,stroke:#0f172a;
+    class deep deepclass
+          </pre>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+          <div class="space-y-2">
+            <h3 class="text-xs uppercase tracking-wider text-slate-500">
+              Wins if built this way
+            </h3>
+            <ul class="list-disc list-inside space-y-1 text-slate-700">
+              <li>Leverage: one deep mail-server module, N mailbox tenants</li>
+              <li>
+                Locality: spam/DKIM/DMARC logic stays inside the deep module,
+                not scattered across your Go layer
+              </li>
+              <li>
+                Seam: webmail and provisioning stay swappable adapters over
+                Stalwart's JMAP/REST surface
+              </li>
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-xs uppercase tracking-wider text-slate-500">
+              Where it leaks
+            </h3>
+            <ul class="list-disc list-inside space-y-1 text-slate-700">
+              <li>
+                Deliverability reputation is external state (Google/Microsoft
+                trust) — no module boundary contains it
+              </li>
+              <li>
+                New domains inherit no reputation; smart-host relay is a forced
+                seam early on
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="rounded border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900"
+        >
+          ADR candidate: adopt Stalwart (single Rust binary, JMAP-native, S3
+          backend) over Postfix+Dovecot+SOGo — fewer seams to operate, closer
+          fit to a containerized Go-centric stack.
+        </div>
+      </section>
+
+      <!-- B) TRANSACTIONAL EMAIL API -->
+      <section id="transactional-email" class="space-y-6">
+        <div class="flex items-baseline gap-3">
+          <h2 class="font-serif text-2xl">B) Transactional / bulk email API</h2>
+          <span
+            class="text-xs uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded"
+            >Strong — fits existing stack</span
+          >
+        </div>
+        <p class="max-w-3xl text-sm text-slate-600">
+          Send path as an outbox-pattern pipeline: API accepts and queues,
+          workers own delivery. This is the same shape as the outbox pattern
+          already in use elsewhere — the deep module here is the MTA +
+          retry/bounce handling, not the API.
+        </p>
+
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <pre class="mermaid">
+sequenceDiagram
+    participant Tenant as Tenant app
+    participant API as Go API (REST)
+    participant PG as PostgreSQL\n(tenant config, templates, suppression)
+    participant Q as Queue (Kafka / NATS JetStream)
+    participant W as Go send workers
+    participant MTA as MTA (Postfix / Haraka)
+    participant CH as ClickHouse\n(events: sent, opened, clicked, bounced)
+    participant Hook as Tenant webhook
+
+    Tenant->>API: POST /v2/send (idempotency_key, template, payload)
+    API->>PG: validate tenant, template, suppression list
+    API->>Q: enqueue outbox event
+    API-->>Tenant: 202 accepted
+    Q->>W: deliver event
+    W->>MTA: SMTP send (DKIM signed)
+    MTA-->>W: accepted / bounced
+    W->>CH: record delivery event
+    MTA-->>CH: bounce / complaint webhook
+    CH->>Hook: forward event (open/click/bounce)
+          </pre>
+        </div>
+
+        <div class="rounded-lg border border-slate-200 bg-white p-4">
+          <pre class="mermaid">
+flowchart LR
+    subgraph accept["Accept path"]
+      A1["Go API"] --> A2["Validate + rate limit\nper tenant"]
+      A2 --> A3[("Outbox table\nPostgreSQL")]
+    end
+
+    subgraph deliver["Deep module: delivery"]
+      direction TB
+      D1["Kafka / NATS JetStream"]
+      D2["Go send workers\npool per IP/tenant"]
+      D3["MTA: Postfix / Haraka\nDKIM, connection pooling, retries"]
+      D4["IP pool manager\ndedicated IPs, warmup"]
+    end
+
+    subgraph feedback["Feedback seam"]
+      F1["Bounce / complaint webhooks"]
+      F2["Suppression list\nhard bounce, spam complaint, unsub"]
+      F3["ClickHouse event store"]
+      F4["Tenant webhook delivery\n(outbox pattern again)"]
+    end
+
+    A3 -->|CDC / polling| D1
+    D1 --> D2 --> D3
+    D3 <--> D4
+    D3 -.leak: reputation.-> F1
+    F1 --> F2
+    F2 -.enforced at.-> A2
+    D3 --> F3
+    F3 --> F4
+
+    classDef leakclass stroke:#dc2626,stroke-width:2px;
+    class D3 leakclass
+    classDef deepclass fill:#0f172a,color:#f8fafc,stroke:#0f172a;
+    class deliver deepclass
+          </pre>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+          <div class="space-y-2">
+            <h3 class="text-xs uppercase tracking-wider text-slate-500">
+              Wins if built this way
+            </h3>
+            <ul class="list-disc list-inside space-y-1 text-slate-700">
+              <li>
+                Leverage: outbox pattern reused verbatim from existing
+                architecture
+              </li>
+              <li>
+                Locality: suppression enforcement lives at accept-time, not
+                scattered across workers
+              </li>
+              <li>
+                Interface shrinks: tenants see one POST /send; queueing,
+                retries, IP pooling all internal
+              </li>
+            </ul>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-xs uppercase tracking-wider text-slate-500">
+              Where it leaks
+            </h3>
+            <ul class="list-disc list-inside space-y-1 text-slate-700">
+              <li>
+                MTA reputation is shared external state again — same leak shape
+                as (A), smaller surface
+              </li>
+              <li>
+                Feedback loop (bounce → suppression) must be synchronous enough
+                to block re-sends, or it's a seam that silently drifts
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="rounded border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900"
+        >
+          ADR candidate: suppression-list check happens in the accept path (A2),
+          not the worker — keeps compliance logic local to one seam instead of
+          duplicated per worker.
+        </div>
+      </section>
+
+      <!-- TOP RECOMMENDATION -->
+      <section
+        id="top-recommendation"
+        class="rounded-lg border-2 border-emerald-600 bg-emerald-50 p-6 space-y-2"
+      >
+        <h2 class="font-serif text-xl">Build order</h2>
+        <p class="text-sm text-slate-700">
+          Start with
+          <a
+            href="#transactional-email"
+            class="underline decoration-emerald-600"
+            >B) transactional email API</a
+          >. It validates the deliverability infrastructure — DKIM signing, IP
+          warmup, bounce handling, ClickHouse event pipeline — that A) needs
+          anyway, using an architecture that's a direct match for the outbox
+          pattern already in place. A) then becomes: adopt Stalwart, put the
+          same provisioning discipline in front of it, and reuse the
+          reputation-management work from B.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
