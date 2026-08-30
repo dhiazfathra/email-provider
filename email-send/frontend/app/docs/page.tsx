@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   API_ERRORS,
-  DOCS_LANGS,
   DOCS_NAV,
   DOCS_SECTIONS,
   DOC_STREAMS,
@@ -12,13 +11,11 @@ import {
   QUICKSTART_STEPS,
   RATE_LIMITS,
   SCOPES,
-  SDK_CHIPS,
   SEND_PARAMS,
   SEND_REQUEST,
   SEND_RESPONSE,
   WEBHOOK_EVENTS,
   WEBHOOK_SAMPLE,
-  type DocsLang,
 } from "@/lib/mock/docs";
 import { CodeBlock, MONO } from "../console/ui";
 
@@ -54,7 +51,6 @@ function useActiveSection() {
 }
 
 export default function PlumeDocs() {
-  const [lang, setLang] = useState<DocsLang>("curl");
   const active = useActiveSection();
 
   // Responsive values come from CSS variables in globals.css, so the first
@@ -426,43 +422,8 @@ export default function PlumeDocs() {
                   border: "1px solid rgba(255,255,255,.9)",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 6,
-                    padding: "2px 4px 12px",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {DOCS_LANGS.map((t) => {
-                    const on = lang === t.id;
-                    return (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => setLang(t.id)}
-                        aria-pressed={on}
-                        style={{
-                          padding: "7px 13px",
-                          borderRadius: 11,
-                          fontSize: 12.5,
-                          fontFamily: "inherit",
-                          cursor: "pointer",
-                          fontWeight: on ? 600 : 400,
-                          color: on ? "#4c46b8" : "rgba(38,35,74,.6)",
-                          background: on
-                            ? "rgba(255,255,255,.9)"
-                            : "rgba(255,255,255,.45)",
-                          border: `1px solid ${on ? "rgba(124,126,242,.4)" : "rgba(255,255,255,.85)"}`,
-                        }}
-                      >
-                        {t.label}
-                      </button>
-                    );
-                  })}
-                </div>
                 <CodeBlock
-                  lines={QUICKSTART_CODE[lang]}
+                  lines={QUICKSTART_CODE.curl}
                   style={{ ...codePanel, padding: 20 }}
                 />
               </div>
@@ -1033,109 +994,6 @@ export default function PlumeDocs() {
                     </div>
                   </div>
                 ))}
-              </div>
-            </section>
-
-            <section
-              id="sdks"
-              style={{
-                ...section,
-                background: "rgba(255,255,255,.5)",
-                border: "1px solid rgba(255,255,255,.8)",
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 24,
-                alignItems: "center",
-              }}
-            >
-              <div style={{ flex: 1, minWidth: 280 }}>
-                <h2
-                  style={{
-                    margin: 0,
-                    fontSize: h2,
-                    fontWeight: 600,
-                    letterSpacing: "-.03em",
-                  }}
-                >
-                  SDKs and SMTP
-                </h2>
-                <p
-                  style={{
-                    margin: "12px 0 0",
-                    fontSize: 15.5,
-                    lineHeight: 1.6,
-                    opacity: 0.58,
-                    maxWidth: 520,
-                    textWrap: "pretty",
-                  }}
-                >
-                  Typed clients handle retries, idempotency keys and batching.
-                  An existing app can point at the relay instead and get the
-                  same streams and traces.
-                </p>
-                <div
-                  style={{
-                    marginTop: 16,
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 7,
-                  }}
-                >
-                  {SDK_CHIPS.map((c) => (
-                    <span
-                      key={c}
-                      style={{
-                        padding: "6px 11px",
-                        borderRadius: 11,
-                        fontFamily: MONO,
-                        fontSize: 12,
-                        color: "#4c46b8",
-                        background: "rgba(124,126,242,.13)",
-                      }}
-                    >
-                      {c}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 9,
-                  minWidth: 250,
-                }}
-              >
-                <Link
-                  href="/console"
-                  style={{
-                    padding: "13px 22px",
-                    textAlign: "center",
-                    borderRadius: 14,
-                    fontSize: 14.5,
-                    fontWeight: 500,
-                    color: "#fff",
-                    background: PRIMARY,
-                    boxShadow: "0 14px 30px -14px rgba(124,126,242,.95)",
-                  }}
-                >
-                  Get an API key
-                </Link>
-                <Link
-                  href="/"
-                  style={{
-                    padding: "13px 22px",
-                    textAlign: "center",
-                    borderRadius: 14,
-                    fontSize: 14.5,
-                    fontWeight: 500,
-                    color: "#5b57c8",
-                    background: "rgba(255,255,255,.7)",
-                    border: "1px solid rgba(255,255,255,.95)",
-                  }}
-                >
-                  Back to plume.email
-                </Link>
               </div>
             </section>
           </main>
