@@ -5,7 +5,8 @@ human call, plus the ones found stale/invalid against current content. One
 file per finding: options considered, tradeoffs, and a recommendation.
 
 Numbering is incremental, oldest first. Superseded entries stay in place and
-say so — never rewrite history, add a new entry instead.
+say so — never rewrite history, add a new entry instead. Copy
+[0000-template.md](0000-template.md) for a new entry.
 
 | #                                                       | Finding                                                  | Status                           |
 | ------------------------------------------------------- | -------------------------------------------------------- | -------------------------------- |
