@@ -21,15 +21,13 @@ export const ALLOWED_NUMERALS = [
   { value: "818", reason: "fragment of the hex colour #818cf8" },
   { value: "48.00", reason: "illustrative amount in a sample request payload" },
   { value: "2291", reason: "illustrative order id in a sample payload" },
-  {
-    value: "1756458842,",
-    reason: "illustrative webhook signature timestamp",
-  },
+  { value: "1756458842", reason: "illustrative webhook signature timestamp" },
   { value: "1756458841", reason: "illustrative SMTP response sample" },
   { value: "250", reason: "illustrative SMTP response code, not a claim" },
   { value: "2.0.0", reason: "illustrative SMTP enhanced status code" },
   { value: "20020", reason: "fragment of a sample SMTP relay hostname" },
   { value: "10 M", reason: "regex fragment of the 10 MB attachment limit" },
+  { value: "10", reason: "the 10 in the 10 MB attachment limit" },
   { value: "78", reason: "fragment of a hex colour in a decorative gradient" },
   { value: "084", reason: "fragment of a hex colour in a decorative gradient" },
   { value: "09", reason: "fragment of a hex colour in a decorative gradient" },
@@ -37,6 +35,15 @@ export const ALLOWED_NUMERALS = [
   { value: "03", reason: "fragment of a hex colour in a decorative gradient" },
   { value: "64", reason: "fragment of a hex colour in a decorative gradient" },
   { value: "07", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "50", reason: "recipient cap per send call, a real API constraint" },
+  { value: "256", reason: "the 256 in HMAC-SHA256, an algorithm name" },
+  { value: "29", reason: "day fragment of the illustrative accepted_at date" },
+  { value: "09", reason: "hour fragment of the illustrative accepted_at time" },
+  {
+    value: "02",
+    reason: "second fragment of the illustrative accepted_at time",
+  },
+  { value: "9", reason: "digit fragment of an illustrative sample timestamp" },
 ];
 
 /**

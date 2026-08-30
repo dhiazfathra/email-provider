@@ -13,7 +13,10 @@ if (!configPath) throw new Error("tsconfig.json not found");
 const { config } = ts.readConfigFile(configPath, ts.sys.readFile);
 const parsed = ts.parseJsonConfigFileContent(config, ts.sys, ".");
 
-const appFiles = walk("app").filter((f) => f.endsWith(".tsx"));
+const SOURCE_EXTENSIONS = [".ts", ".tsx", ".js", ".jsx"];
+const appFiles = walk("app").filter((f) =>
+  SOURCE_EXTENSIONS.some((ext) => f.endsWith(ext)),
+);
 const program = ts.createProgram(
   [...appFiles, ...parsed.fileNames],
   parsed.options,

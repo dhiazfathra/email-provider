@@ -8,9 +8,13 @@ import {
 
 const ROUTES = ["/", "/docs"];
 
-const numerals = (text: string) => [
-  ...new Set(text.match(/\d[\d,]*(?:\.\d+)* ?(?:%|ms|B|M|k)?/g) ?? []),
-];
+// Excludes a digit run glued to letters on either side (D1, H27, SHA256) so a
+// decision identifier or algorithm name can't be mistaken for a decided
+// numeric value.
+const NUMERAL_RE =
+  /(?<![A-Za-z0-9])\d[\d,]*(?:\.\d+)*(?: ?(?:%|ms|B|M|k))?(?![A-Za-z0-9])/g;
+
+const numerals = (text: string) => [...new Set(text.match(NUMERAL_RE) ?? [])];
 
 for (const route of ROUTES) {
   test(`${route} renders no fabricated or undecided numeral`, async ({
@@ -18,13 +22,16 @@ for (const route of ROUTES) {
   }) => {
     await page.goto(route);
     const text = await page.locator("body").innerText();
-    const decided = readDecisionsText();
+    // Word-bounded extraction (not a raw substring check) so an undecided
+    // numeral like "1" can't pass just because it occurs inside an unrelated
+    // identifier such as "D1".
+    const decidedValues = new Set(numerals(readDecisionsText()));
     const deleted = new Set(DELETED_NUMERALS);
     const allowed = new Set(ALLOWED_NUMERALS.map((a) => a.value));
     const offenders = numerals(text).filter(
       (n) =>
         deleted.has(n.trim()) ||
-        (!allowed.has(n.trim()) && !decided.includes(n.trim())),
+        (!allowed.has(n.trim()) && !decidedValues.has(n.trim())),
     );
     expect(offenders).toEqual([]);
   });
@@ -35,9 +42,10 @@ for (const route of ROUTES) {
     await page.goto(route);
     const text = await page.locator("body").innerText();
     const found = FORBIDDEN_PHRASES.filter((p) =>
-      new RegExp(`\\b${p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(
-        text,
-      ),
+      new RegExp(
+        `\\b${p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}s?\\b`,
+        "i",
+      ).test(text),
     );
     expect(found).toEqual([]);
   });
