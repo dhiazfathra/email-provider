@@ -1,28 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import {
-  AUDIT,
-  AUDIT_CATEGORIES,
-  AUDIT_DOT,
-  initialsOf,
-} from "@/lib/mock/console";
+import { AUDIT_DESCRIPTIONS, AUDIT_ENTRIES } from "@/lib/data/audit";
+import { AUDIT_CATEGORIES, type AuditCategory } from "@/lib/enums";
 import { ACTIVITY_RETENTION_DAYS } from "@/lib/limits";
+import { formatCount, relativeTime } from "@/lib/format";
+import { gradient } from "@/lib/theme";
+import { initialsOf } from "@/lib/mock/console";
 import { Card, COLUMN_HEADER, ELLIPSIS, FilterChip, MONO, Tag } from "../ui";
 
-function categoryTint(category: string): [string, string] {
-  if (category === "Security") return ["rgba(192,132,252,.2)", "#8b5cf6"];
-  if (category === "Members") return ["rgba(94,234,212,.24)", "#0e8f80"];
-  return ["rgba(124,126,242,.16)", "#4c46b8"];
-}
+const CATEGORY_TINT: Record<AuditCategory, [string, string]> = {
+  keys: ["rgba(124,126,242,.16)", "#4c46b8"],
+  domains: ["rgba(139,140,246,.18)", "#4c46b8"],
+  templates: ["rgba(103,232,249,.2)", "#0e8f80"],
+  suppressions: ["rgba(167,139,250,.18)", "#6d4fd6"],
+  members: ["rgba(94,234,212,.24)", "#0e8f80"],
+};
+
+const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
 export default function ConsoleAudit() {
-  const [category, setCategory] = useState<string>("All");
+  const [category, setCategory] = useState<AuditCategory | "all">("all");
 
   const cols = "var(--audit-cols)";
 
-  const rows = AUDIT.filter(
-    (a) => category === "All" || a.category === category,
+  const rows = AUDIT_ENTRIES.filter(
+    (a) => category === "all" || a.category === category,
   );
 
   return (
@@ -30,30 +33,26 @@ export default function ConsoleAudit() {
       <section
         style={{ marginTop: 24, display: "flex", flexWrap: "wrap", gap: 8 }}
       >
+        <FilterChip
+          label="All"
+          dot="#7c7ef2"
+          count={AUDIT_ENTRIES.length}
+          active={category === "all"}
+          onClick={() => setCategory("all")}
+        />
         {AUDIT_CATEGORIES.map((c) => (
           <FilterChip
             key={c}
-            label={c}
-            dot={AUDIT_DOT[c]}
-            count={
-              c === "All"
-                ? AUDIT.length
-                : AUDIT.filter((a) => a.category === c).length
-            }
+            label={cap(c)}
+            dot={CATEGORY_TINT[c][1]}
+            count={AUDIT_ENTRIES.filter((a) => a.category === c).length}
             active={category === c}
             onClick={() => setCategory(c)}
           />
         ))}
       </section>
 
-      <Card
-        alpha={0.5}
-        style={{
-          marginTop: 14,
-          padding: 8,
-          boxShadow: "0 28px 66px -50px rgba(76,66,160,.7)",
-        }}
-      >
+      <Card alpha={0.5} style={{ marginTop: 14, padding: 8 }}>
         <div
           style={{
             display: "grid",
@@ -70,10 +69,11 @@ export default function ConsoleAudit() {
           <span style={{ textAlign: "right" }}>When</span>
         </div>
         {rows.map((a, i) => {
-          const [bg, color] = categoryTint(a.category);
+          const [bg, color] = CATEGORY_TINT[a.category];
+          const desc = AUDIT_DESCRIPTIONS[a.id];
           return (
             <div
-              key={`${a.when}-${a.target}`}
+              key={a.id}
               style={{
                 display: "grid",
                 gridTemplateColumns: cols,
@@ -104,7 +104,7 @@ export default function ConsoleAudit() {
                     fontSize: 11,
                     fontWeight: 600,
                     color: "#fff",
-                    background: a.tint,
+                    background: gradient(i),
                   }}
                 >
                   {initialsOf(a.actor)}
@@ -116,10 +116,9 @@ export default function ConsoleAudit() {
                 color={color}
                 style={{ justifySelf: "start", display: "var(--wide-only)" }}
               >
-                {a.action}
+                {desc.action}
               </Tag>
               <span
-                className="wide-only"
                 style={{
                   fontFamily: MONO,
                   fontSize: 12.5,
@@ -127,28 +126,23 @@ export default function ConsoleAudit() {
                   ...ELLIPSIS,
                 }}
               >
-                {a.target}
+                {desc.target}
               </span>
               <span
                 className="wide-only"
                 style={{
                   fontFamily: MONO,
-                  fontSize: 12,
-                  opacity: 0.45,
+                  fontSize: 12.5,
+                  opacity: 0.5,
                   ...ELLIPSIS,
                 }}
               >
-                {a.source}
+                {a.ip}
               </span>
               <span
-                style={{
-                  fontSize: 12.5,
-                  opacity: 0.45,
-                  textAlign: "right",
-                  whiteSpace: "nowrap",
-                }}
+                style={{ fontSize: 12.5, opacity: 0.45, textAlign: "right" }}
               >
-                {a.when}
+                {relativeTime(a.at)}
               </span>
             </div>
           );
@@ -169,8 +163,8 @@ export default function ConsoleAudit() {
         }}
       >
         <span style={{ fontSize: 13.5, opacity: 0.55 }}>
-          Audit events are immutable and retained for {ACTIVITY_RETENTION_DAYS}{" "}
-          days.
+          Audit events are immutable and retained for{" "}
+          {formatCount(ACTIVITY_RETENTION_DAYS)} days.
         </span>
       </div>
     </>

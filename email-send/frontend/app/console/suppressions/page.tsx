@@ -1,16 +1,20 @@
 "use client";
 
-import { SUPPRESS_STATS, SUPPRESSIONS } from "@/lib/mock/console";
+import { SUPPRESSIONS, suppressStats } from "@/lib/data/suppressions";
+import { formatCount } from "@/lib/format";
 import { Card, COLUMN_HEADER, ELLIPSIS, MONO, Tag } from "../ui";
 
 function reasonTint(reason: string): [string, string] {
-  if (reason === "Complaint") return ["rgba(192,132,252,.2)", "#8b5cf6"];
-  if (reason === "Unsubscribed") return ["rgba(103,232,249,.22)", "#4c46b8"];
+  if (reason === "complaint") return ["rgba(192,132,252,.2)", "#8b5cf6"];
+  if (reason === "unsubscribed") return ["rgba(103,232,249,.22)", "#4c46b8"];
   return ["rgba(167,139,250,.18)", "#4c46b8"];
 }
 
+const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
+
 export default function ConsoleSuppressions() {
   const cols = "var(--sup-cols)";
+  const SUPPRESS_STATS = suppressStats();
 
   return (
     <>
@@ -39,7 +43,7 @@ export default function ConsoleSuppressions() {
                 letterSpacing: "-.035em",
               }}
             >
-              {s.value}
+              {formatCount(s.value)}
             </div>
             <div style={{ marginTop: 4, fontSize: 12.5, opacity: 0.45 }}>
               {s.note}
@@ -86,7 +90,7 @@ export default function ConsoleSuppressions() {
                 color={color}
                 style={{ justifySelf: "start", display: "var(--wide-only)" }}
               >
-                {s.reason}
+                {cap(s.reason)}
               </Tag>
               <span
                 className="wide-only"

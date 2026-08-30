@@ -3,8 +3,19 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { NAV, PAGE_META, PROJECT } from "@/lib/mock/console";
+import { NAV, PAGE_META } from "@/lib/mock/console";
+import { PROJECT } from "@/lib/data/project";
+import { TEMPLATES } from "@/lib/data/templates";
+import { DOMAINS } from "@/lib/data/domains";
+import { SUPPRESSIONS } from "@/lib/data/suppressions";
+import { formatCount } from "@/lib/format";
 import { DEFAULT_RANGE, RANGES, isRange } from "@/lib/ranges";
+
+const NAV_BADGE: Record<string, number> = {
+  "/console/templates": TEMPLATES.length,
+  "/console/domains": DOMAINS.length,
+  "/console/suppressions": SUPPRESSIONS.length,
+};
 
 export default function ConsoleLayout({
   children,
@@ -195,7 +206,7 @@ function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
                     {n.glyph}
                   </span>
                   <span>{n.label}</span>
-                  {n.badge && (
+                  {NAV_BADGE[n.href] !== undefined && (
                     <span
                       style={{
                         fontSize: 11,
@@ -206,7 +217,7 @@ function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
                         color: "#5b57c8",
                       }}
                     >
-                      {n.badge}
+                      {formatCount(NAV_BADGE[n.href])}
                     </span>
                   )}
                 </Link>
@@ -216,50 +227,20 @@ function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
 
           <div style={{ flex: 1 }} />
 
-          <div
-            style={{
-              padding: 15,
-              borderRadius: 18,
-              background: "rgba(255,255,255,.62)",
-              border: "1px solid rgba(255,255,255,.9)",
-            }}
-          >
+          {PROJECT.demo && (
             <div
               style={{
-                display: "flex",
-                alignItems: "baseline",
-                justifyContent: "space-between",
+                padding: "10px 13px",
+                borderRadius: 14,
+                fontSize: 12.5,
+                opacity: 0.55,
+                background: "rgba(255,255,255,.5)",
+                border: "1px solid rgba(255,255,255,.85)",
               }}
             >
-              <span style={{ fontSize: 13, fontWeight: 600 }}>
-                Monthly volume
-              </span>
-              <span style={{ fontSize: 12, opacity: 0.5 }}>
-                {PROJECT.quota.pct}%
-              </span>
+              Demo project — sample data, not live.
             </div>
-            <div
-              style={{
-                marginTop: 9,
-                height: 7,
-                borderRadius: 5,
-                background: "rgba(124,126,242,.16)",
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  width: `${PROJECT.quota.pct}%`,
-                  height: "100%",
-                  borderRadius: 5,
-                  background: "linear-gradient(90deg,#7c7ef2,#67e8f9)",
-                }}
-              />
-            </div>
-            <div style={{ marginTop: 9, fontSize: 12.5, opacity: 0.5 }}>
-              {PROJECT.quota.usedLabel}
-            </div>
-          </div>
+          )}
         </aside>
 
         <main

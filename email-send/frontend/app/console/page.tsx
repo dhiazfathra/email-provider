@@ -6,11 +6,12 @@ import { useViewport } from "@/lib/useViewport";
 import {
   CHART_LEGEND,
   deliverySeries,
-  kpisForRange,
   REPUTATION,
   sparkBars,
   STREAMS,
 } from "@/lib/mock/console";
+import { kpisForRange } from "@/lib/data/metrics";
+import { formatCount } from "@/lib/format";
 import { DEFAULT_RANGE, isRange } from "@/lib/ranges";
 import { Card } from "./ui";
 
@@ -75,16 +76,18 @@ function ConsoleOverviewInner() {
                   letterSpacing: "-.035em",
                 }}
               >
-                {k.value}
+                {k.unit === "pct" ? `${k.value}%` : formatCount(k.value)}
               </span>
               <span
                 style={{
                   fontSize: 12.5,
                   fontWeight: 600,
-                  color: k.deltaColor,
+                  color: k.delta < 0 ? "#8b5cf6" : "#0e8f80",
                 }}
               >
+                {k.delta > 0 ? "+" : ""}
                 {k.delta}
+                {k.unit === "pct" ? "%" : ""}
               </span>
             </div>
             <div
@@ -97,7 +100,7 @@ function ConsoleOverviewInner() {
                 height: 30,
               }}
             >
-              {sparkBars(mob ? 16 : 22, i + 1, k.dip).map((b, j) => (
+              {sparkBars(mob ? 16 : 22, i + 1, k.delta < 0).map((b, j) => (
                 <span
                   key={j}
                   style={{

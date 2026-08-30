@@ -1,6 +1,7 @@
 "use client";
 
-import { TEMPLATES } from "@/lib/mock/console";
+import { TEMPLATES } from "@/lib/data/templates";
+import { gradient } from "@/lib/theme";
 import { Card, ELLIPSIS, MONO } from "../ui";
 
 export default function ConsoleTemplates() {
@@ -13,7 +14,7 @@ export default function ConsoleTemplates() {
         gap: 14,
       }}
     >
-      {TEMPLATES.map((t) => (
+      {TEMPLATES.map((t, i) => (
         <Card
           key={t.slug}
           blur={20}
@@ -28,7 +29,7 @@ export default function ConsoleTemplates() {
             style={{
               height: 96,
               borderRadius: 16,
-              background: t.tint,
+              background: gradient(i),
               display: "flex",
               flexDirection: "column",
               justifyContent: "flex-end",
@@ -102,7 +103,7 @@ export default function ConsoleTemplates() {
               opacity: 0.45,
             }}
           >
-            {t.slug}
+            {t.slug}@{t.version}
           </div>
           <div style={{ marginTop: 14, display: "flex", gap: 18 }}>
             <div>
