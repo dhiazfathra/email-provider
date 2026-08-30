@@ -51,6 +51,8 @@ backend-meaningful set rather than a labelling system. Customers who want
 `receipts` as a distinction get a free-text tag field later; adding it is
 additive and does not break the enum.
 
+**Delivered:** S2, e2ed495..4fbefa7.
+
 ### D2 — No plans, no tiers, one limit set
 
 **Status:** committed (PoC). **Resolves:** H7, H24, H25.
@@ -71,6 +73,8 @@ written independently, and 100/s is 260M/month against a stated 3,000/month cap.
 With no quota there is nothing for the rate to contradict. Metering and per-plan
 limits return with billing, not before.
 
+**Delivered:** S2, e2ed495..4fbefa7.
+
 ### D3 — The site states that pricing does not exist yet
 
 **Status:** committed (PoC). **Resolves:** H19, H20. **Amended 2026-08-30.**
@@ -90,6 +94,8 @@ them. Softening the wording would keep the commitment and lose only the clarity.
 
 A "not yet" statement is kept rather than removing the subject entirely, because
 pricing is a question every visitor arrives with and silence is not an answer.
+
+**Delivered:** S2, e2ed495..4fbefa7.
 
 ### D4 — Engagement tracking deferred; PoC message states are exclusive
 
@@ -189,6 +195,8 @@ and relative timestamps, none of which any API can produce. The alternative —
 serving presentation from the API — bakes today's visual design into a public
 contract permanently, and makes a colour change a breaking API change.
 
+**Delivered:** S2, e2ed495..4fbefa7.
+
 ### D12 — Template versions pin with `@n`; slugs are immutable
 
 **Status:** committed (PoC). **Resolves:** H23.
@@ -196,6 +204,8 @@ contract permanently, and makes a colour change a breaking API change.
 A template has a stable slug and an integer version: `receipt@14`. The slug never
 carries the version, so `receipt-v3` becomes `receipt`. Both mechanisms shipped
 simultaneously and disagreed about the number.
+
+**Delivered:** S2, e2ed495..4fbefa7.
 
 ### D13 — Fabricated metrics deleted; sample data labelled
 
@@ -212,6 +222,8 @@ provider rates (H6) and the duplicated 99.31% (H1) are the claim rule's own
 evidence: the same fabricated number was presented as both a fleet statistic and
 a single project's KPI.
 
+**Delivered:** S2, e2ed495..4fbefa7.
+
 ### D14 — Derived numbers are derived
 
 **Status:** committed (PoC). **Resolves:** H8, H9.
@@ -220,6 +232,8 @@ Nav badge counts, filter counts and totals are computed from the collection they
 describe. None is typed by hand. Today `Templates 24` labels six templates,
 `Suppressions 1.2k` labels a stated 1,204 against eight rows, and the activity
 filter counts miss 46 messages.
+
+**Delivered:** S2, e2ed495..4fbefa7.
 
 ### D15 — Every control is real or absent
 
@@ -241,6 +255,8 @@ such control exists.
 Nothing ships that looks interactive and is not. Dishonest affordances are the
 same failure as dishonest numbers, expressed in JSX.
 
+**Delivered:** S2, e2ed495..4fbefa7.
+
 ### D16 — One activity window
 
 **Status:** committed (PoC). **Resolves:** H26.
@@ -249,6 +265,8 @@ The range switcher is the only window control, and `range` is a real parameter
 carried to the data layer and later to `GET /v2/messages`. The "last 24 hours"
 page blurb, which contradicted the switcher, is removed.
 
+**Delivered:** S2, e2ed495..4fbefa7.
+
 ### D17 — Audit categories derive from the audit event enum
 
 **Status:** committed (PoC). **Resolves:** H27.
@@ -256,11 +274,15 @@ page blurb, which contradicted the switcher, is removed.
 Every category a row can carry is selectable. Today `Suppressions` rows exist and
 no filter can reach them, and the contract inherited the unreachable member.
 
+**Delivered:** S2, e2ed495..4fbefa7.
+
 ### D18 — Public metrics endpoint is `GET /v2/public/metrics`
 
 **Status:** committed (PoC). **Resolves:** H28.
 
 The mock's `GET /v2/public/landing` header comment is corrected.
+
+**Delivered:** S2, e2ed495..4fbefa7.
 
 ### D19 — A data seam and four guard tests
 
@@ -278,6 +300,8 @@ mocks today). No page imports `lib/mock/*` after that. Four tests:
 
 The fourth is the fix for the root cause. The app currently has no tests, no
 `fetch`, and no API client of any kind.
+
+**Delivered:** S2, e2ed495..4fbefa7.
 
 ### D20 — The contract generator is byte-exact, checked in CI
 
