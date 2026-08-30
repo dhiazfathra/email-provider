@@ -107,11 +107,5 @@ export const FEATURES = [
   },
 ];
 
-export const NAV_LINKS = ["Product", "Deliverability", "Docs"];
-export const FOOTER_LINKS = [
-  "Docs",
-  "API reference",
-  "Status",
-  "Security",
-  "Support",
-];
+export const NAV_LINKS = ["Docs", "Console"];
+export const FOOTER_LINKS = ["Docs", "Console"];

@@ -136,7 +136,7 @@ export default function PlumeLanding() {
             {NAV_LINKS.map((l) => (
               <Link
                 key={l}
-                href={l === "Docs" ? "/docs" : "#"}
+                href={l === "Docs" ? "/docs" : "/console"}
                 style={{
                   padding: "9px 14px",
                   borderRadius: 12,
@@ -477,7 +477,8 @@ export default function PlumeLanding() {
               minWidth: 260,
             }}
           >
-            <div
+            <form
+              onSubmit={(e) => e.preventDefault()}
               style={{
                 display: "flex",
                 gap: 8,
@@ -491,6 +492,7 @@ export default function PlumeLanding() {
                 type="email"
                 placeholder="you@company.com"
                 aria-label="Work email"
+                disabled
                 style={{
                   flex: 1,
                   minWidth: 0,
@@ -503,23 +505,27 @@ export default function PlumeLanding() {
                   color: "#26234a",
                 }}
               />
-              <Link
-                href="/console"
+              <button
+                type="submit"
+                disabled
                 style={{
                   padding: "11px 19px",
                   borderRadius: 12,
                   fontSize: 14.5,
                   fontWeight: 500,
+                  fontFamily: "inherit",
                   color: "#fff",
                   background: PRIMARY,
+                  border: "none",
+                  cursor: "not-allowed",
                 }}
               >
                 Start
-              </Link>
-            </div>
-            <div style={{ fontSize: 12.5, opacity: 0.45, paddingLeft: 6 }}>
-              3,000 messages a month free. No card required.
-            </div>
+              </button>
+            </form>
+            <p style={{ fontSize: 12.5, opacity: 0.55, paddingLeft: 6 }}>
+              Sign-up opens when the API does.
+            </p>
           </div>
         </section>
 
@@ -551,7 +557,7 @@ export default function PlumeLanding() {
             {FOOTER_LINKS.map((l) => (
               <Link
                 key={l}
-                href={l === "Docs" ? "/docs" : "#"}
+                href={l === "Docs" ? "/docs" : "/console"}
                 style={{ color: "inherit" }}
               >
                 {l}

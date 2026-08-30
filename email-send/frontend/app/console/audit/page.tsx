@@ -7,6 +7,7 @@ import {
   AUDIT_DOT,
   initialsOf,
 } from "@/lib/mock/console";
+import { ACTIVITY_RETENTION_DAYS } from "@/lib/limits";
 import { Card, COLUMN_HEADER, ELLIPSIS, FilterChip, MONO, Tag } from "../ui";
 
 function categoryTint(category: string): [string, string] {
@@ -168,25 +169,9 @@ export default function ConsoleAudit() {
         }}
       >
         <span style={{ fontSize: 13.5, opacity: 0.55 }}>
-          Audit events are immutable and retained for 400 days.
+          Audit events are immutable and retained for {ACTIVITY_RETENTION_DAYS}{" "}
+          days.
         </span>
-        <div style={{ flex: 1 }} />
-        <button
-          type="button"
-          style={{
-            fontSize: 13.5,
-            fontWeight: 600,
-            fontFamily: "inherit",
-            cursor: "pointer",
-            padding: "8px 14px",
-            borderRadius: 12,
-            color: "#5b57c8",
-            background: "rgba(255,255,255,.85)",
-            border: "1px solid rgba(124,126,242,.35)",
-          }}
-        >
-          Export CSV
-        </button>
       </div>
     </>
   );

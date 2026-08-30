@@ -40,6 +40,8 @@ test("docs search filters the sections", async ({ page }) => {
 
 test("Cmd+K focuses the docs search field", async ({ page }) => {
   await page.goto("/docs");
+  await page.bringToFront();
+  await page.locator("body").click();
   await page.keyboard.press("ControlOrMeta+KeyK");
   await expect(page.getByLabel("Search the docs")).toBeFocused();
 });
