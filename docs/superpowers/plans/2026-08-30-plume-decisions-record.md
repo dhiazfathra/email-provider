@@ -36,7 +36,7 @@ Tasks 1–4 close the two unverified rows. Nothing else in the spec is outstandi
 ## Global Constraints
 
 - All commands run from the repository root
-  (`/Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider`) unless a step
+  (`cd "$(git rev-parse --show-toplevel)"`) unless a step
   says otherwise. Use `cd` explicitly in every command block — a plan step that
   assumes an inherited working directory is how the S2 plan first landed in the
   wrong tree.
@@ -112,7 +112,7 @@ test("parseLimits reads the fenced D2 block", () => {
 - [ ] **Step 2: Run it and verify it fails**
 
 ```bash
-cd /Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider
+cd "$(git rev-parse --show-toplevel)"
 node --test scripts/check-decisions.test.mjs
 ```
 
@@ -223,7 +223,7 @@ if (import.meta.filename === process.argv[1]) {
 - [ ] **Step 4: Run the unit tests and verify they pass**
 
 ```bash
-cd /Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider
+cd "$(git rev-parse --show-toplevel)"
 node --test scripts/check-decisions.test.mjs
 ```
 
@@ -232,7 +232,7 @@ Expected: PASS, 3 tests.
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider
+cd "$(git rev-parse --show-toplevel)"
 npx prettier --write scripts/check-decisions.mjs scripts/check-decisions.test.mjs
 git add scripts/check-decisions.mjs scripts/check-decisions.test.mjs
 git commit -m "test(decisions): add a parser for the decisions record and register"
@@ -247,7 +247,7 @@ git commit -m "test(decisions): add a parser for the decisions record and regist
 - [ ] **Step 1: Run the check**
 
 ```bash
-cd /Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider
+cd "$(git rev-parse --show-toplevel)"
 node scripts/check-decisions.mjs; echo "exit=$?"
 ```
 
@@ -267,7 +267,7 @@ regex and add a case to `check-decisions.test.mjs` covering it.
 - [ ] **Step 3: Re-run until clean, then commit any record fixes**
 
 ```bash
-cd /Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider
+cd "$(git rev-parse --show-toplevel)"
 node scripts/check-decisions.mjs; echo "exit=$?"
 npx prettier --write email-send/PRODUCT_DECISIONS.md
 git add email-send/PRODUCT_DECISIONS.md
@@ -313,7 +313,7 @@ frontend file.
 - [ ] **Step 2: Verify it parses**
 
 ```bash
-cd /Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider
+cd "$(git rev-parse --show-toplevel)"
 python3 -c "import yaml; yaml.safe_load(open('.github/workflows/decisions.yml')); print('ok')"
 ```
 
@@ -322,11 +322,17 @@ Expected: `ok`.
 - [ ] **Step 3: Prove it fails on a broken record**
 
 ```bash
-cd /Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider
+cd "$(git rev-parse --show-toplevel)"
 cp email-send/PRODUCT_DECISIONS.md /tmp/record.bak
-sed -i '' 's/^| H12 |.*$//' email-send/PRODUCT_DECISIONS.md
+trap 'cp /tmp/record.bak email-send/PRODUCT_DECISIONS.md' EXIT
+python3 -c "
+import re
+p = 'email-send/PRODUCT_DECISIONS.md'
+text = open(p).read()
+text = re.sub(r'^\| H12 \|.*$', '', text, flags=re.MULTILINE)
+open(p, 'w').write(text)
+"
 node scripts/check-decisions.mjs; echo "exit=$?"
-cp /tmp/record.bak email-send/PRODUCT_DECISIONS.md
 ```
 
 Expected: `error: H12 is in the register with no disposition`, `exit=1`, and the
@@ -336,7 +342,7 @@ A guard never observed failing is not known to guard anything.
 - [ ] **Step 4: Commit**
 
 ```bash
-cd /Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider
+cd "$(git rev-parse --show-toplevel)"
 npx prettier --write .github/workflows/decisions.yml
 git add .github/workflows/decisions.yml
 git commit -m "ci: fail when the decisions record leaves a claim unresolved"
@@ -365,7 +371,7 @@ start at `0001-tooling`.
 - [ ] **Step 3: Commit**
 
 ```bash
-cd /Users/dhiazfathra/Documents/GitHub/dhiazfathra/email-provider
+cd "$(git rev-parse --show-toplevel)"
 npx prettier --write docs/evidence/email-send/0000-decisions-record/check.md
 git add docs/evidence/email-send/0000-decisions-record/
 git commit -m "docs(email-send): evidence that every registered claim is resolved"

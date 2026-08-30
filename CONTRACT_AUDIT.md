@@ -1,3 +1,5 @@
+# API_CONTRACTS.md audit — Plume (`email-send/`) backend plan
+
 > **Superseded in part — read `FRONTEND_REMEDIATION_PLAN.md` §0 first.**
 > This audit judged the contract against `lib/mock/*.ts` and the docs page,
 > treating them as the specification. They are unverified Claude-generated
@@ -5,8 +7,6 @@
 > console has no write controls at all — those contract endpoints are invented,
 > not lagging), and §1.1's use of the docs page as proof of what the send API
 > is. The rest stands.
-
-# API_CONTRACTS.md audit — Plume (`email-send/`) backend plan
 
 Scope: is `API_CONTRACTS.md` sufficient as the plan for building the Plume
 backend and wiring the frontend to it? Then: how it sits against section **B)

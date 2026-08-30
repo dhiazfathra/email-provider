@@ -111,7 +111,7 @@ Fixing the contract first would just re-launder the same claims. Hence the order
 the user proposed is right, with one addition — a decisions document _above_ the
 frontend, because otherwise "fix the frontend" has nothing to be fixed against.
 
-```
+```text
 PRODUCT_DECISIONS.md   ← new, the only source of truth
         ↓ frontend is made to match it (or made to admit it doesn't know)
    frontend + mocks

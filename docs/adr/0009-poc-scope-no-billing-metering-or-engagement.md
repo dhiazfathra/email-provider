@@ -23,7 +23,7 @@ That is not an arithmetic slip; it is two unrelated concepts sharing a widget.
 
 The PoC ships one limit set and no commerce:
 
-```
+```yaml
 send_rate_per_second: 100
 activity_retention_days: 30
 monthly_quota: none

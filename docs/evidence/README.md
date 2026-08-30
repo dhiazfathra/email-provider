@@ -92,8 +92,8 @@ Rules:
 ```bash
 cd email-send/frontend && npm run dev &        # or email-inbox/frontend
 npx --yes agent-browser open http://localhost:3000/console
-npx --yes agent-browser screenshot ../../docs/evidence/email-send/000N-slug/name.png
-npx --yes agent-browser record start ../../docs/evidence/email-send/000N-slug/name.webm http://localhost:3000/console
+npx --yes agent-browser screenshot docs/evidence/email-send/000N-slug/name.png
+npx --yes agent-browser record start docs/evidence/email-send/000N-slug/name.webm http://localhost:3000/console
 # ...interact...
 npx --yes agent-browser record stop
 npx --yes agent-browser close

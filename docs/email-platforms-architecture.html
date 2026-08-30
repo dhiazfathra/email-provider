@@ -198,7 +198,7 @@ sequenceDiagram
     participant CH as ClickHouse\n(events: sent, opened, clicked, bounced)
     participant Hook as Tenant webhook
 
-    Tenant->>API: POST /send (template, payload)
+    Tenant->>API: POST /v2/send (idempotency_key, template, payload)
     API->>PG: validate tenant, template, suppression list
     API->>Q: enqueue outbox event
     API-->>Tenant: 202 accepted

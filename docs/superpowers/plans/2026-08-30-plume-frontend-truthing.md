@@ -660,6 +660,7 @@ export const relativeTime = (iso: string, now: Date = new Date()): string => {
   return new Date(iso).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
+    timeZone: "UTC",
   });
 };
 
@@ -1437,6 +1438,7 @@ export function SentAt({ iso }: { iso: string }) {
     new Date(iso).toLocaleDateString("en-GB", {
       day: "numeric",
       month: "short",
+      timeZone: "UTC",
     }),
   );
   useEffect(() => setLabel(relativeTime(iso)), [iso]);

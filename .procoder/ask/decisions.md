@@ -1,4 +1,4 @@
-## Next step after the S1 and S2 specs
+# Next step after the S1 and S2 specs
 
 The specs, ADRs and evidence scaffold are written but uncommitted. The
 brainstorming flow's next step is the writing-plans skill, not implementation.
