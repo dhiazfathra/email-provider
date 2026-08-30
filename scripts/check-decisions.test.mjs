@@ -30,3 +30,8 @@ test("parseLimits reads the fenced D2 block", () => {
     billing: "none",
   });
 });
+
+test("parseLimits rejects a line with no delimiter", () => {
+  const block = "```\nplume.limits\n  billing\n```";
+  assert.throws(() => parseLimits(block), /invalid limits entry/);
+});

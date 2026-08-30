@@ -33,8 +33,9 @@ export const parseLimits = (text) => {
       .map((l) => l.trim())
       .filter(Boolean)
       .map((l) => {
-        const [k, ...rest] = l.split(":");
-        return [k.trim(), rest.join(":").trim()];
+        const delimiter = l.indexOf(":");
+        if (delimiter < 1) throw new Error(`invalid limits entry: ${l}`);
+        return [l.slice(0, delimiter).trim(), l.slice(delimiter + 1).trim()];
       }),
   );
 };
