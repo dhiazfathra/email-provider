@@ -1,3 +1,3 @@
-<!-- markdownlint-disable-next-line MD041 -- this is an include directive, not prose -->
+<!-- markdownlint-disable MD041 -- include directive, not prose -->
 
 @AGENTS.md
