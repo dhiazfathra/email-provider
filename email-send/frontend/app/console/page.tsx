@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useViewport } from "@/lib/useViewport";
 import {
   CHART_LEGEND,
@@ -10,7 +10,7 @@ import {
   sparkBars,
   STREAMS,
 } from "@/lib/mock/console";
-import { kpisForRange } from "@/lib/data/metrics";
+import { getMetrics, type Kpi } from "@/lib/api/metrics";
 import { formatCount } from "@/lib/format";
 import { DEFAULT_RANGE, isRange } from "@/lib/ranges";
 import { Card } from "./ui";
@@ -30,7 +30,10 @@ function ConsoleOverviewInner() {
   const searchParams = useSearchParams();
   const rangeParam = searchParams.get("range") ?? undefined;
   const range = isRange(rangeParam) ? rangeParam : DEFAULT_RANGE;
-  const KPIS = kpisForRange(range);
+  const [KPIS, setKPIS] = useState<Kpi[]>([]);
+  useEffect(() => {
+    getMetrics({ range }).then(setKPIS);
+  }, [range]);
   // Bar counts change the number of DOM nodes, not the box they sit in, so
   // this one stays in JS — it cannot shift the layout.
   const chart = deliverySeries(

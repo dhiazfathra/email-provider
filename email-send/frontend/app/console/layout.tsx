@@ -2,20 +2,11 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { NAV, PAGE_META } from "@/lib/mock/console";
-import { PROJECT } from "@/lib/data/project";
-import { TEMPLATES } from "@/lib/data/templates";
-import { DOMAINS } from "@/lib/data/domains";
-import { SUPPRESSIONS } from "@/lib/data/suppressions";
+import { getNavBadges, getProject } from "@/lib/api/project";
 import { formatCount } from "@/lib/format";
 import { DEFAULT_RANGE, RANGES, isRange } from "@/lib/ranges";
-
-const NAV_BADGE: Record<string, number> = {
-  "/console/templates": TEMPLATES.length,
-  "/console/domains": DOMAINS.length,
-  "/console/suppressions": SUPPRESSIONS.length,
-};
 
 export default function ConsoleLayout({
   children,
@@ -39,6 +30,17 @@ function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
     router.replace(`${pathname}?range=${r}`, { scroll: false });
 
   const meta = PAGE_META[pathname] ?? PAGE_META["/console"];
+
+  const [project, setProject] = useState<{
+    initial: string;
+    name: string;
+    demo: boolean;
+  } | null>(null);
+  const [navBadge, setNavBadge] = useState<Record<string, number>>({});
+  useEffect(() => {
+    getProject().then(setProject);
+    getNavBadges().then(setNavBadge);
+  }, []);
 
   return (
     <div
@@ -173,10 +175,10 @@ function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
                   background: "linear-gradient(140deg,#7c7ef2,#a78bfa)",
                 }}
               >
-                {PROJECT.initial}
+                {project?.initial}
               </span>
               <span style={{ fontSize: 14, fontWeight: 500 }}>
-                {PROJECT.name}
+                {project?.name}
               </span>
             </div>
           </div>
@@ -206,7 +208,7 @@ function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
                     {n.glyph}
                   </span>
                   <span>{n.label}</span>
-                  {NAV_BADGE[n.href] !== undefined && (
+                  {navBadge[n.href] !== undefined && (
                     <span
                       style={{
                         fontSize: 11,
@@ -217,7 +219,7 @@ function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
                         color: "#5b57c8",
                       }}
                     >
-                      {formatCount(NAV_BADGE[n.href])}
+                      {formatCount(navBadge[n.href])}
                     </span>
                   )}
                 </Link>
@@ -227,7 +229,7 @@ function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
 
           <div style={{ flex: 1 }} />
 
-          {PROJECT.demo && (
+          {project?.demo && (
             <div
               style={{
                 padding: "10px 13px",

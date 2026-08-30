@@ -1,11 +1,10 @@
-"use client";
-
-import { DOMAINS } from "@/lib/data/domains";
+import { listDomains } from "@/lib/api/domains";
 import { Card, ELLIPSIS, MONO, Tag } from "../ui";
 
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
-export default function ConsoleDomains() {
+export default async function ConsoleDomains() {
+  const DOMAINS = await listDomains();
   return (
     <section
       style={{

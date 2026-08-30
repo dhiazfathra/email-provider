@@ -1,10 +1,9 @@
-"use client";
-
-import { TEMPLATES } from "@/lib/data/templates";
+import { listTemplates } from "@/lib/api/templates";
 import { gradient } from "@/lib/theme";
 import { Card, ELLIPSIS, MONO } from "../ui";
 
-export default function ConsoleTemplates() {
+export default async function ConsoleTemplates() {
+  const TEMPLATES = await listTemplates();
   return (
     <section
       style={{

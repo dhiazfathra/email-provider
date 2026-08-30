@@ -1,6 +1,4 @@
-"use client";
-
-import { SUPPRESSIONS, suppressStats } from "@/lib/data/suppressions";
+import { listSuppressions, getSuppressStats } from "@/lib/api/suppressions";
 import { formatCount } from "@/lib/format";
 import { Card, COLUMN_HEADER, ELLIPSIS, MONO, Tag } from "../ui";
 
@@ -12,9 +10,10 @@ function reasonTint(reason: string): [string, string] {
 
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
-export default function ConsoleSuppressions() {
+export default async function ConsoleSuppressions() {
   const cols = "var(--sup-cols)";
-  const SUPPRESS_STATS = suppressStats();
+  const SUPPRESSIONS = await listSuppressions();
+  const SUPPRESS_STATS = await getSuppressStats();
 
   return (
     <>

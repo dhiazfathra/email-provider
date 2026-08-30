@@ -1,12 +1,12 @@
-"use client";
-
-import { KEYS } from "@/lib/data/keys";
-import { SNIPPET } from "@/lib/data/domains";
+import { listKeys } from "@/lib/api/keys";
+import { getSnippet } from "@/lib/api/domains";
 import { maskKey } from "@/lib/format";
 import { SentAt } from "../activity/sent-at";
 import { Card, CodeBlock, MONO } from "../ui";
 
-export default function ConsoleKeys() {
+export default async function ConsoleKeys() {
+  const KEYS = await listKeys();
+  const SNIPPET = await getSnippet();
   const cols = "var(--key-cols)";
 
   return (
