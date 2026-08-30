@@ -104,7 +104,9 @@ The Plume frontend was built from unverified design output and shipped 37
 fabricated or contradictory claims. [`FRONTEND_REMEDIATION_PLAN.md`](FRONTEND_REMEDIATION_PLAN.md)
 catalogues them; [`email-send/PRODUCT_DECISIONS.md`](email-send/PRODUCT_DECISIONS.md)
 resolves every one and is the source of truth for any number, enum, limit or
-promise on a Plume surface. The four-spec decomposition — decisions, frontend
+promise on a Plume surface; `scripts/check-decisions.mjs` parses the register
+against the record and CI (`.github/workflows/decisions.yml`) fails the build
+if any claim is left unresolved. The four-spec decomposition — decisions, frontend
 truthing, contract rewrite, backend — is in
 [`docs/superpowers/specs/`](docs/superpowers/specs/), where S1 records the
 decomposition and S2 specifies the frontend work, its seven-PR sequence and its
