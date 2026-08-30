@@ -15,6 +15,28 @@ export const ALLOWED_NUMERALS = [
   { value: "422", reason: "HTTP status in the errors table" },
   { value: "429", reason: "HTTP status in the errors table" },
   { value: "500", reason: "HTTP status in the errors table" },
+  { value: "503", reason: "HTTP status in the errors table" },
+  { value: "67", reason: "fragment of the hex colour #67e8f9" },
+  { value: "140", reason: "gradient angle in decorative tints, not a metric" },
+  { value: "818", reason: "fragment of the hex colour #818cf8" },
+  { value: "48.00", reason: "illustrative amount in a sample request payload" },
+  { value: "2291", reason: "illustrative order id in a sample payload" },
+  {
+    value: "1756458842,",
+    reason: "illustrative webhook signature timestamp",
+  },
+  { value: "1756458841", reason: "illustrative SMTP response sample" },
+  { value: "250", reason: "illustrative SMTP response code, not a claim" },
+  { value: "2.0.0", reason: "illustrative SMTP enhanced status code" },
+  { value: "20020", reason: "fragment of a sample SMTP relay hostname" },
+  { value: "10 M", reason: "regex fragment of the 10 MB attachment limit" },
+  { value: "78", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "084", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "09", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "3B", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "03", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "64", reason: "fragment of a hex colour in a decorative gradient" },
+  { value: "07", reason: "fragment of a hex colour in a decorative gradient" },
 ];
 
 /**

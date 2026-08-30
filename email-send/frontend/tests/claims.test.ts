@@ -11,8 +11,7 @@ const numerals = (text: string) => [
   ...new Set(text.match(/\d[\d.,]*\s?(?:%|ms|B|M|k)?/g) ?? []),
 ];
 
-// Unskip once PR 3 deletes the cut claims from lib/mock/landing.ts and docs.ts.
-describe.skip("claims", () => {
+describe("claims", () => {
   test("every numeral in copy is in the decisions record or the allowlist", () => {
     const decided = readDecisionsText();
     const allowed = new Set(ALLOWED_NUMERALS.map((a) => a.value));
