@@ -55,3 +55,20 @@ export const FORBIDDEN_PHRASES = [
   "within an hour",
   "under an hour",
 ];
+
+/**
+ * Fabricated values deleted from copy in PR 3. Blocked even though they still
+ * appear in the decisions record's own prose narrating their deletion —
+ * finding them in copy again means the claim came back (spec risk R2).
+ */
+export const DELETED_NUMERALS = [
+  "99.31%",
+  "180 ms",
+  "4.1B",
+  "412 ms",
+  "30 d",
+  "98.7%",
+  "96.2%",
+  "94.8%",
+  "91.3%",
+];

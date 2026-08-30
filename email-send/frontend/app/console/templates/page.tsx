@@ -1,5 +1,6 @@
 import { listTemplates } from "@/lib/api/templates";
 import { gradient } from "@/lib/theme";
+import { formatCount } from "@/lib/format";
 import { Card, ELLIPSIS, MONO } from "../ui";
 
 export default async function ConsoleTemplates() {
@@ -106,7 +107,9 @@ export default async function ConsoleTemplates() {
           </div>
           <div style={{ marginTop: 14, display: "flex", gap: 18 }}>
             <div>
-              <div style={{ fontSize: 15, fontWeight: 600 }}>{t.sends}</div>
+              <div style={{ fontSize: 15, fontWeight: 600 }}>
+                {formatCount(t.sends)}
+              </div>
               <div style={{ fontSize: 11.5, opacity: 0.45 }}>30d sends</div>
             </div>
             <div>
@@ -114,10 +117,10 @@ export default async function ConsoleTemplates() {
                 style={{
                   fontSize: 15,
                   fontWeight: 600,
-                  color: parseFloat(t.open) > 50 ? "#0e8f80" : "#6d4fd6",
+                  color: t.open > 50 ? "#0e8f80" : "#6d4fd6",
                 }}
               >
-                {t.open}
+                {t.open}%
               </div>
               <div style={{ fontSize: 11.5, opacity: 0.45 }}>Open rate</div>
             </div>

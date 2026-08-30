@@ -1,5 +1,10 @@
 import { expect, test } from "vitest";
-import { MESSAGE_STATES, STREAMS, isStream } from "@/lib/enums";
+import {
+  AUDIT_CATEGORIES,
+  MESSAGE_STATES,
+  STREAMS,
+  isStream,
+} from "@/lib/enums";
 import { MESSAGES } from "@/lib/data/messages";
 import { AUDIT_ENTRIES } from "@/lib/data/audit";
 import { isAuditCategory, isMessageState } from "@/lib/enums";
@@ -35,7 +40,10 @@ test("every value in the data is an enum member", () => {
   }
 });
 
-test("every audit category is reachable by a filter", () => {
+test("every audit category used in the data has a filter chip", () => {
   const used = new Set(AUDIT_ENTRIES.map((a) => a.category));
-  for (const c of used) expect(isAuditCategory(c)).toBe(true);
+  const filterChips = new Set(AUDIT_CATEGORIES);
+  for (const c of used) {
+    expect(filterChips.has(c), `${c} has no filter chip`).toBe(true);
+  }
 });

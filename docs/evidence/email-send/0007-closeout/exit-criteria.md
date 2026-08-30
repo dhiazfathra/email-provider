@@ -6,7 +6,7 @@
 cd email-send/frontend && grep -rn 'href="#"' app/ ; echo "exit=$?"
 ```
 
-```
+```text
 exit=1
 ```
 
@@ -16,7 +16,7 @@ exit=1
 grep -rnE "#[0-9a-fA-F]{6}|linear-gradient" lib/data/ ; echo "exit=$?"
 ```
 
-```
+```text
 exit=1
 ```
 
@@ -26,7 +26,7 @@ exit=1
 grep -rn "@/lib/data/" app/ ; echo "exit=$?"
 ```
 
-```
+```text
 exit=1
 ```
 

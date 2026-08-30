@@ -13,7 +13,13 @@ export const listMessages = async (opts: {
   range: Range;
   state?: MessageState;
 }): Promise<Message[]> => {
-  const since = Date.now() - RANGE_MS[opts.range];
+  // Anchored to the fixture's own latest timestamp, not the real wall clock,
+  // so the "last N" window stays correct regardless of when this runs. A
+  // real backend replaces this anchor with Date.now() when it lands.
+  const latest = Math.max(
+    ...MESSAGES.map((m) => new Date(m.sent_at).getTime()),
+  );
+  const since = latest - RANGE_MS[opts.range];
   return MESSAGES.filter(
     (m) =>
       new Date(m.sent_at).getTime() >= since &&
