@@ -1,23 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import {
-  NAV,
-  PAGE_META,
-  PROJECT,
-  RANGES,
-  type Range,
-} from "@/lib/mock/console";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { NAV, PAGE_META, PROJECT } from "@/lib/mock/console";
+import { DEFAULT_RANGE, RANGES, isRange } from "@/lib/ranges";
 
 export default function ConsoleLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  return (
+    <Suspense fallback={null}>
+      <ConsoleLayoutInner>{children}</ConsoleLayoutInner>
+    </Suspense>
+  );
+}
+
+function ConsoleLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [range, setRange] = useState<Range>("7d");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const rangeParam = searchParams.get("range") ?? undefined;
+  const range = isRange(rangeParam) ? rangeParam : DEFAULT_RANGE;
+  const setRange = (r: (typeof RANGES)[number]) =>
+    router.replace(`${pathname}?range=${r}`, { scroll: false });
 
   const meta = PAGE_META[pathname] ?? PAGE_META["/console"];
 

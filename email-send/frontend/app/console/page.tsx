@@ -1,21 +1,40 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { useViewport } from "@/lib/useViewport";
 import {
   CHART_LEGEND,
   deliverySeries,
-  KPIS,
+  kpisForRange,
   REPUTATION,
   sparkBars,
   STREAMS,
 } from "@/lib/mock/console";
+import { DEFAULT_RANGE, isRange } from "@/lib/ranges";
 import { Card } from "./ui";
 
+const CHART_POINTS = { "24h": 8, "7d": 14, "30d": 30 } as const;
+
 export default function ConsoleOverview() {
+  return (
+    <Suspense fallback={null}>
+      <ConsoleOverviewInner />
+    </Suspense>
+  );
+}
+
+function ConsoleOverviewInner() {
   const { mob } = useViewport();
+  const searchParams = useSearchParams();
+  const rangeParam = searchParams.get("range") ?? undefined;
+  const range = isRange(rangeParam) ? rangeParam : DEFAULT_RANGE;
+  const KPIS = kpisForRange(range);
   // Bar counts change the number of DOM nodes, not the box they sit in, so
   // this one stays in JS — it cannot shift the layout.
-  const chart = deliverySeries(mob ? 7 : 14);
+  const chart = deliverySeries(
+    mob ? Math.min(7, CHART_POINTS[range]) : CHART_POINTS[range],
+  );
 
   return (
     <>

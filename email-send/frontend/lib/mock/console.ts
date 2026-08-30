@@ -68,40 +68,45 @@ export const PAGE_META: Record<string, { title: string; blurb: string }> = {
   },
 };
 
-export const RANGES = ["24h", "7d", "30d"] as const;
-export type Range = (typeof RANGES)[number];
+import type { Range } from "@/lib/ranges";
+
+/** Scales the illustrative KPI set by the selected window (D14: derived, not stored). */
+const RANGE_SCALE: Record<Range, number> = { "24h": 0.08, "7d": 1, "30d": 4.1 };
 
 /** `GET /v2/projects/{projectId}/metrics?range=` */
-export const KPIS = [
-  {
-    label: "Sent",
-    value: "1,362,004",
-    delta: "+8.4%",
-    deltaColor: "#0e8f80",
-    dip: false,
-  },
-  {
-    label: "Delivered",
-    value: "99.31%",
-    delta: "+0.12%",
-    deltaColor: "#0e8f80",
-    dip: false,
-  },
-  {
-    label: "Bounced",
-    value: "0.42%",
-    delta: "−0.06%",
-    deltaColor: "#0e8f80",
-    dip: true,
-  },
-  {
-    label: "Complaints",
-    value: "0.014%",
-    delta: "+0.003%",
-    deltaColor: "#8b5cf6",
-    dip: true,
-  },
-];
+export const kpisForRange = (range: Range) => {
+  const scale = RANGE_SCALE[range];
+  return [
+    {
+      label: "Sent",
+      value: Math.round(1_362_004 * scale).toLocaleString("en-GB"),
+      delta: "+8.4%",
+      deltaColor: "#0e8f80",
+      dip: false,
+    },
+    {
+      label: "Delivered",
+      value: "99.31%",
+      delta: "+0.12%",
+      deltaColor: "#0e8f80",
+      dip: false,
+    },
+    {
+      label: "Bounced",
+      value: "0.42%",
+      delta: "−0.06%",
+      deltaColor: "#0e8f80",
+      dip: true,
+    },
+    {
+      label: "Complaints",
+      value: "0.014%",
+      delta: "+0.003%",
+      deltaColor: "#8b5cf6",
+      dip: true,
+    },
+  ];
+};
 
 /** Sparkline shape for a KPI card. Deterministic so server and client agree. */
 export function sparkBars(count: number, seed: number, dip: boolean) {
