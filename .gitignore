@@ -10,3 +10,8 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# vendored agent skill packs (samber/cc-skills-golang) - restore with the skills installer
+.agents/
+agent/
+skills-lock.json
